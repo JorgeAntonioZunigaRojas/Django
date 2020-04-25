@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block titulo %}
+    AQuiEsta - Login
+{% endblock titulo %}
+
+{% block extracss %}
+    <link rel="stylesheet" href="../static/css/iniciarsesion.css">
+{% endblock extracss %}
+
+{% block body %}
+    <div class="contenedorBody">
+        <section class="form-login">
+            <form method="POST">
+                {% csrf_token %}
+                <h5>Iniciar sesión</h5>
+                <input class="controls" type="text" name="username" placeholder="Usuario"><br>
+                <input class="controls"type="password" name="password" id="" placeholder="Contraseña" ><br>
+                {% for message in messages %}
+                    <p>{{message}}</p>
+                {% endfor %}
+                <input class="buttons" type="submit" value="Ingresar">
+                <p><a href="{% url 'registarusuario' %}">¿Desea crear una cuenta?</a></p>
+            </form>
+        </section>
+    </div>
+{% endblock body %}

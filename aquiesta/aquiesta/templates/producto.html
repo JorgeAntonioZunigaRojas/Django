@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+{% block titulo %}
+    AQuiEsta - Producto
+{% endblock titulo %}
+
+{% block extracss %}
+    <style >
+        .fila1{
+            height: 330px;
+        }
+        .fila2{
+            height: 200px;
+        }
+        .mapa{
+            width: 100%;
+            height: 320px;
+        }
+        .producto{
+            width: 100%;
+            height: 320px;
+        }
+        .empresa_imagen{
+            width: 100%;
+            height: 100%;
+        }
+        .clave{
+            text-align: right;
+            font-weight: bold;
+            padding-right: 5px;
+            margin-left: 15px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12px;
+            padding-top: 2px;
+            padding-bottom: 2px;
+        }
+        .valor{
+            padding-left: 5px;
+            margin-right: 15px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12px;
+            padding-top: 2px;
+            padding-bottom: 2px;
+        }
+        .tituloDetalle{
+            text-align: center;
+            font-weight: bold;
+            background-color: #3F51B5;
+            color: white;
+            padding: 0;
+        }
+        .detalle{
+            padding: 0;
+            border: 1px solid gray;
+        }
+        .par{
+            background-color:#EFEFEF;
+        }
+        .contenedor-producto-imagen,
+        .contenedor-mapa-imagen,
+        .contenedor-empresa-data,
+        .contenedor-empresa-imagen
+        {
+            border-top: 1px solid gray;
+        }
+        .contenedor-producto-imagen,
+        .contenedor-mapa-imagen,
+        .contenedor-producto-data,
+        .contenedor-empresa-data
+        {
+            border-left: 1px solid gray;
+        }
+        .contenedor-mapa-imagen,
+        .contenedor-empresa-imagen
+        {
+            border-right: 1px solid gray;
+        }
+        .contenedorProducto{
+            margin-top: 80px;
+        }
+        .contenedor-producto-data,
+        .contenedor-empresa-data,
+        .contenedor-empresa-imagen{
+            border-bottom: 1px solid gray;
+        }
+
+        .pro_nombre{
+            font-size: 17px;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            text-align: center;
+            height: 55px;
+        }
+        .pro_codigo{
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: 14px;
+            color: darkgrey;
+        }
+        .pro_precio{
+            font-size: 20px;
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+            color: red;
+            font-weight: bold;
+        }
+        .unidad{
+            font-size: 11px;
+        }
+        .contenedor-producto-data,
+        .contenedor-empresa-data{
+            text-align: center;
+        }
+        .btn-agregar{
+            width: 120px;
+        }
+        .emp_distancia{
+            font-size: 15px;
+        }
+        .emp_nombre{
+            font-weight: bold;
+        }
+        .emp_nombre,
+        .emp_direccion,
+        .emp_telefono,
+        .emp_detalle{
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: 14px;
+            color: darkgrey;
+        }
+
+    </style>
+{% endblock extracss %}
+
+
+{% block body %}
+    <div class="contenedorProducto">
+        <div class="container">
+            <div class="row fila1" >
+                <div class="col-4 p-1 contenedor-producto-imagen">    
+                    <img class="producto" src="../static/img/imagen_no_disponible.png" alt="">
+                </div>
+                <div class="col-8 p-1 contenedor-mapa-imagen">
+                    <img class="mapa" src="../static/img/mapa.png" alt="">
+                </div>
+            </div>
+            <div class="row fila2">
+                <div class="col-4 contenedor-producto-data">
+                    <span class="pro_nombre">
+                        {{producto.nombre}}
+                    </span>
+                    <br>
+                    <span class="pro_codigo">
+                        Codigo {{producto.codigo}}
+                    </span>
+                    <br>
+                    <span class="pro_precio">
+                        {{producto.moneda}} {{producto.precio}}
+                    </span>
+                    <span class="badge badge-danger unidad">UN</span>
+                    <br>
+                    <br>
+                    <div class="agregar">
+                        <a href="{% url 'agregarproducto' producto.id_producto %}" class="btn btn-success btn-sm btn-agregar" >Agregar</a>
+                    </div>
+                </div>
+                <div class="col-8">
+                    <div class="row fila2">
+                        <div class="col-8 contenedor-empresa-data">
+                            <span class="badge badge-primary emp_distancia" >
+                                A 600 metros / 8 minutos
+                            </span>
+                            <br>
+                            <br>
+                            <span class="emp_nombre">
+                                {{empresa.rznsocial}} - {{empresa.ruc}}
+                            </span>
+                            <br>
+                            <span class="emp_direccion">
+                                {{empresa.direccion}} - {{empresa.ubigeo}}
+                            </span>
+                            <br>
+                            <span class="emp_telefono">
+                                {{empresa.telefono}}
+                            </span>
+                            <br>
+                            <span class="emp_detalle">
+                                {{empresa.detalle}}
+                            </span>
+                        </div>
+                        <div class="col-4 p-1 contenedor-empresa-imagen">
+                            <img class="empresa_imagen" src="../static/img/ferreteria_matusita.png" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row fila3">
+                {% if productodetalle %}
+                    <div class="col-12 detalle">
+                        <div class="col tituloDetalle">
+                            DETALLE DEL PRODUCTO
+                        </div>
+                        {% for detalle in productodetalle %}
+                            {% if loop.index is even %}
+                                <div class="row">
+                                    <div class="col clave impar">{{detalle.clave}}:</div>
+                                    <div class="col valor impar">{{detalle.valor}}</div>
+                                </div>    
+                            {% else %}
+                                <div class="row">
+                                    <div class="col clave par">{{detalle.clave}}:</div>
+                                    <div class="col valor par">{{detalle.valor}}</div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock body %}

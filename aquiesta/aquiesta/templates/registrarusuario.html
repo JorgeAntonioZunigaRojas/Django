@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block titulo %}
+    AQuiEsta - registrar usuario
+{% endblock titulo %}
+
+{% block extracss %}
+    <style >
+        .contenedorusuario{
+            width: 500px;
+            margin: auto;
+            margin-top: 200px;
+            background-color: #4D4C4C;
+            padding: 20px;
+            color: white;
+        }
+        .form-group{
+            margin-bottom: 0.4rem;
+        }
+        .btn-registrar{
+            width: 100%;
+            margin-top: 20px;
+        }
+        .titulo{
+            width: 100%;
+            text-align: center;
+        }
+    </style>
+{% endblock extracss %}
+
+{% block body %}
+    <div class="container">
+        <div class="contenedorusuario">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group row">
+                    <h6 class="titulo">REGISTRAR CUENTA</h6>
+                </div>
+
+                <div class="form-group row">
+                    <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Usuario:</label>
+                    <div class="col-sm-10">
+                        {{form.username}}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Email:</label>
+                    <div class="col-sm-10">
+                        {{form.email}}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Contraseña: </label>
+                    <div class="col-sm-10">
+                        {{form.password1}}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Confirmar:</label>
+                    <div class="col-sm-10">
+                        {{form.password2}}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    {{form.errors}}
+                </div>
+                <button type="submit" class="btn btn-sm btn-primary btn-registrar">Registrar</button>
+            </form>
+            </div>
+        </div>
+    </div>
+{% endblock body %}
+
+{% block extrajs %}
+    <script>
+        var form_fields = document.getElementsByTagName('input')
+        for (var field in form_fields){
+            form_fields[field].className = 'form-control form-control-sm'
+        }
+        
+    </script>
+{% endblock extrajs %}

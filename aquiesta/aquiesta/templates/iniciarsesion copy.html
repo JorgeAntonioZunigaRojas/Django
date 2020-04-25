@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+            AQuiEsta        
+    </title>
+
+    <link rel="stylesheet" href="../static/css/bootstrap.css">
+    <link rel="stylesheet" href="../static/css/iniciarsesion.css">
+    <style>
+        #formulario{
+            display: inline;
+        }
+        #producto{
+            width: 500px;
+        }
+        .sesionbar{
+            display: inline;
+        }
+        #btn_iniciarsesion,
+        #btn_cerrarsesion{
+            margin-left: 10px;
+        }
+        .usuario{
+            color: yellow;
+        }
+        .topbar{
+            background-color: #3F51B5;
+        }
+        .contenedorBody{
+            margin-top: 100px;
+        }
+
+
+    </style>
+
+</head>
+<body>
+    <!-- Header -->
+    <nav class="navbar navbar-expand-sm fixed-top topbar">
+        <div class="container">
+            <div class="searchbar">
+                <a href="#" class="navbar-brand">
+                    <img src="../static/img/buscar4.jpg" alt="" style="height: 50px;">
+                </a>
+                <form action="{% url 'buscar' %}" method="" class="form-inline" id="formulario">
+                    <input type="text" placeholder="Buscar" class="form-control mr-sm-2" id="producto" name="producto"> 
+                    <button class="btn btn-success" type="submit" >Buscar</button>    
+                </form>
+            </div>
+            <div class="sesionbar">
+                    <button type="button" class="btn btn-success" id="btn_cerrarsesion" >Iniciar sesión</button>
+            </div>
+        </div>        
+    </nav> 
+    <!-- /Header -->
+    
+    <div class="contenedorBody">
+        <section class="form-login">
+            <form action="">
+                <h5>Iniciar sesión</h5>
+                <input class="controls" type="email" name="inputUsuario" value="" placeholder="Email"><br>
+                <input class="controls"type="password" name="inputContrasena" id="" placeholder="Contraseña" ><br>
+                <input class="buttons" type="submit" value="Ingresar">
+                <p><a href="#">¿Desea crear una cuenta?</a></p>
+            </form>
+        </section>
+    </div>
+</body>
+</html>

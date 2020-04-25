@@ -1,0 +1,90 @@
+#navbar{
+    height: 57px;
+}
+.contenedor{
+    padding: 40px 10px 10px 20.5%;
+}
+#staticBackdropLabel{
+    display: inline-block;
+}
+.modal-header{
+    font-family: sans-serif;
+}
+.modal-body{
+    overflow: hidden;
+    font-family: sans-serif;
+}
+.form-group{
+    margin-bottom: 5px;
+}
+.etiqueta{
+    font-family: sans-serif;
+    font-weight: normal;
+    padding-right: 5px;
+    padding-top: 6px;
+    font-size: 15px;
+    text-align: right;
+}
+.inputdata{
+    padding-left: 0;
+}
+/*
+.btn-secondary{
+    background-color: #E0E0E0;
+    
+}
+*/
+.tabla{
+    margin-bottom: 1px;
+}
+
+.tabla .fila .celda-btn{
+    padding-bottom: 2px;
+    padding-top: 2px;
+    text-align: right;
+}
+.titulo-btn-nuevo{
+    width: 100%;
+    display: inline-block;
+    margin-top: 35px;
+}
+.titulo-btn-nuevo .titulo{
+    float: left;
+}
+.titulo-btn-nuevo .btn-nuevo{
+    margin-top: 20px;
+    float: right;
+    margin-right: 10px;
+}
+/*
+.btn{
+    width: 70px;
+}
+*/
+.titulo-columna{
+    background-color:#545B62 ;
+    color: white;
+}
+.empresa_logo,
+.empresa_nombre{
+    border-right:1px solid black;
+}
+.filtros{
+    height: 40px;
+}
+.tienda_seleccionada{
+    font-weight: bold;
+}
+
+#buscarTermino{
+    width: 100%;
+    padding: 5px;
+}
+.lista_paginas{
+    border-top: 1px solid grey;
+    text-align: center;
+    padding-top: 5px;
+}
+.imagen_producto{
+    height: 20px;
+}

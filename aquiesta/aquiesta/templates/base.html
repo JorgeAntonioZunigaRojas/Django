@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block titulo %}
+            AQuiEsta
+        {% endblock titulo %}
+    </title>
+
+    <link rel="stylesheet" href="../static/css/bootstrap.css">
+    <style>
+        #formulario{
+            display: inline;
+        }
+        #producto{
+            width: 500px;
+        }
+        .sesionbar{
+            display: inline;
+        }
+        #btn_iniciarsesion,
+        #btn_cerrarsesion{
+            margin-left: 10px;
+        }
+        .usuario{
+            color: yellow;
+        }
+        .topbar{
+            background-color: #3F51B5;
+        }
+        .contenedorBody{
+            margin-top: 0px;
+        }
+    </style>
+
+    {% block extracss %}
+    {% endblock extracss %}
+</head>
+<body>
+    <!-- Header -->
+    <nav class="navbar navbar-expand-sm fixed-top topbar">
+        <div class="container">
+            <div class="searchbar">
+                <a href="#" class="navbar-brand">
+                    <img src="../static/img/buscar4.jpg" alt="" style="height: 50px;">
+                </a>
+                <form action="{% url 'buscar' %}" method="" class="form-inline" id="formulario">
+                    <input type="text" placeholder="Buscar" class="form-control mr-sm-2" id="producto" name="producto"> 
+                    <button class="btn btn-success btn-sm" type="submit" >Buscar</button>    
+                </form>
+            </div>
+            <div class="sesionbar">
+                {% if request.user.username %}
+                    <a href="#" class="usuario">
+                        <kbd>{{request.user.username}}</kbd>
+                    </a>
+                    <a href="{% url 'cerrarsesion' %}" class="btn btn-success btn-sm" id="btn_cerrarsesion">Cerrar sesión</a>
+                {% else %}
+                    <a href="{% url 'iniciarsesion' %}" class="btn btn-success btn-sm" id="btn_iniciarsesion">Iniciar sesión</a>
+                {% endif %}
+            </div>
+        </div>        
+    </nav> 
+    <!-- /Header -->
+    
+    <div class="contenedorBody">
+        {% block body %}
+        {% endblock body %}
+    </div>
+
+    {% block extrajs %}
+    {% endblock extrajs %}
+</body>
+</html>

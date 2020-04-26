@@ -56,7 +56,10 @@
             <div class="sesionbar">
                 {% if request.user.username %}
                     <a href="#" class="usuario">
-                        <kbd>{{request.user.username}}</kbd>
+                        <span class="badge badge-warning">Ver Perfil: {{request.user.username}}</span>
+                    </a>
+                    <a href="{% url 'pedidoproceso' %}" class="carrito">
+                        <span class="badge badge-warning">( {{Qitems}} )</span>
                     </a>
                     <a href="{% url 'cerrarsesion' %}" class="btn btn-success btn-sm" id="btn_cerrarsesion">Cerrar sesión</a>
                 {% else %}

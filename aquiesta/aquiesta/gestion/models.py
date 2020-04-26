@@ -117,7 +117,7 @@ class Pedido(models.Model):
         db_table = 'pedido'
 
     def __str__(self):
-        return self.id_pedido
+        return str(self.id_pedido)
 
 class Pedidodetalle(models.Model):
     id_item = models.AutoField(primary_key=True)

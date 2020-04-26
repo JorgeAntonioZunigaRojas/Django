@@ -9,8 +9,9 @@ urlpatterns = [
     path('iniciarsesion/' , views.iniciarsesion, name = 'iniciarsesion'),
     path('cerrarsesion/' , views.cerrarsesion, name = 'cerrarsesion'),
     path('registarusuario/' , views.registarusuario, name = 'registarusuario'),
-
     path('agregarproducto/<int:id>' , views.agregarproducto, name = 'agregarproducto'),
+    path('pedidoproceso/' , views.pedidoproceso, name = 'pedidoproceso'),
+    
 ]
 
     

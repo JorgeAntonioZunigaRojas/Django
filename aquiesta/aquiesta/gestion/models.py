@@ -37,6 +37,7 @@ class Empresa(models.Model):
     ubigeo = models.ForeignKey('Ubigeo', models.DO_NOTHING, db_column='id_ubigeo', blank=True, null=True)
     imagen = models.CharField(max_length=200, blank=True, null=True)
     logo = models.CharField(max_length=200, blank=True, null=True)
+    st_sgestion = models.CharField(max_length=200, default='EMITIDA')
 
     class Meta:
         db_table = 'empresa'

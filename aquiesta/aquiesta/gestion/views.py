@@ -9,14 +9,88 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 from gestion.forms import CrearUsuarioForm
-from gestion.models import Producto, Empresa, Productodetalle, Usuario, Pedido, Pedidodetalle
+from gestion.models import Producto, Empresa, Productodetalle, Usuario, Pedido, Pedidodetalle, Categoria
 
+def get_contexto(request):
+    contexto = {}
+    id_user = request.user.id
+    empresa = Empresa.objects.get(usuario__id_usuario=id_user)
+    usuario = Usuario.objects.get(id_usuario=id_user)
+    id_empresa = empresa.id_empresa
+    contexto['empresa'] = empresa
+    contexto['usuario'] = usuario
+    contexto['id_empresa'] = id_empresa
+    return contexto
 
+@login_required(login_url='iniciarsesionempresa')
+def sisCategoria(request):
+    contexto = get_contexto(request)
+    empresa = contexto['empresa']
+    contexto['categorias'] = Categoria.objects.filter(empresa__id_empresa=empresa.id_empresa)
+    return render(request, 'sis-categoria.html', contexto)
+
+@login_required(login_url='iniciarsesionempresa')
+def sisInicio(request):
+    contexto = get_contexto(request)
+    id_user = request.user.id
+    empresa = contexto['empresa']
+    id_empresa = empresa.id_empresa
+    QPxDespachar = Pedido.objects.filter(empresa__id_empresa=id_empresa, st_pedido='COMPRADO').count()
+    QPEntregados = Pedido.objects.filter(empresa__id_empresa=id_empresa, st_pedido='ENTREGADO').count()
+    QPEmitidos = Pedido.objects.filter(empresa__id_empresa=id_empresa).exclude(st_pedido='PROCESO').count()
+    QCategorias = Categoria.objects.filter(empresa__id_empresa=id_empresa).count()
+    QProductos = Producto.objects.filter(categoria__empresa__id_empresa=id_empresa).count()
+    contexto['QPxDespachar'] = QPxDespachar
+    contexto['QPEntregados'] = QPEntregados
+    contexto['QPEmitidos'] = QPEmitidos
+    contexto['QCategorias'] = QCategorias
+    contexto['QProductos'] = QProductos
+
+    return render(request, 'sis-inicio.html', contexto)
+
+def iniciarsesionempresa(request):
+    if request.user.is_authenticated:
+        return redirect('sisinicio')
+    else:
+        if request.method=='POST':
+            empresaruc = request.POST.get('empresaruc')
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                empresa = Empresa.objects.filter(ruc=empresaruc)
+                if empresa:
+                    if user.id==empresa[0].usuario.id_usuario:
+                        login(request, user)
+                        return redirect('sisinicio')
+                    else:
+                        messages.info(request,'RUC y/o Usuario incorecto(s)')
+                else:
+                    messages.info(request,'RUC NO esta registrado')
+            else:
+                messages.info(request,'Usuario y/o contraseña incorrecta(s)')
+            
+        context = {}
+        return render(request, 'iniciarsesionempresa.html', context)
+
+@login_required(login_url='iniciarsesion')
+def confirmarcompra(request, id):
+    pedido = Pedido.objects.get(id_pedido=id)
+    pedido.st_pedido='COMPRADO'
+    pedido.save()
+    return redirect('pedidoproceso')
+
+@login_required(login_url='iniciarsesion')
 def pedidoproceso(request):
-    return render(request, 'pedidoproceso.html')
+    id_user = request.user.id
+    contexto = {}
+    contexto['pedidos'] = Pedido.objects.filter(id_usuario=id_user, st_pedido='PROCESO')
+    contexto['pedidodetalles'] = Pedidodetalle.objects.filter(pedido__id_usuario=id_user, pedido__st_pedido='PROCESO')
+    contexto['Qitems'] = get_Qitems(id_user)
+    return render(request, 'pedidoproceso.html', contexto)
 
 def get_Qitems(id_usuario):
-    QItems = Pedidodetalle.objects.filter(pedido__id_usuario=id_usuario).count()
+    QItems = Pedidodetalle.objects.filter(pedido__id_usuario=id_usuario, pedido__st_pedido='PROCESO').count()
     return QItems
 
 @login_required(login_url='iniciarsesion')
@@ -31,7 +105,7 @@ def agregarproducto(request, id):
         usuario = Usuario.objects.create(id_usuario=id_user, nombre=username)
     if not pedido:
         pedido = Pedido.objects.create(empresa=producto.categoria.empresa, id_usuario=id_user, st_pedido='PROCESO')
-    pedidoitem = Pedidodetalle.objects.filter(pedido=pedido[0].id_pedido, producto=id)
+    pedidoitem = Pedidodetalle.objects.filter(pedido__id_pedido=pedido[0].id_pedido, producto=id)
 
     if not pedidoitem:
         pedidoitem = Pedidodetalle.objects.create(

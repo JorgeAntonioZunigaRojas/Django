@@ -11,7 +11,9 @@ urlpatterns = [
     path('registarusuario/' , views.registarusuario, name = 'registarusuario'),
     path('agregarproducto/<int:id>' , views.agregarproducto, name = 'agregarproducto'),
     path('pedidoproceso/' , views.pedidoproceso, name = 'pedidoproceso'),
-    
+    path('confirmarcompra/<int:id>' , views.confirmarcompra, name = 'confirmarcompra'),
+    path('iniciarsesionempresa/', views.iniciarsesionempresa, name = 'iniciarsesionempresa'),
+    path('sisinicio/', views.sisInicio, name = 'sisinicio'),
+    path('siscategoria/', views.sisCategoria, name = 'siscategoria'),
 ]
 
-    

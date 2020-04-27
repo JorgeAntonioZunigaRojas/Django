@@ -1,11 +1,74 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pedidos en proceso</title>
-</head>
-<body>
-    <h1>Pedidos en proceso</h1>
-</body>
-</html>
+{% extends 'base.html' %}
+{% block titulo %}
+    AQuiEsta - Proceso
+{% endblock titulo %}
+
+{% block extracss %}
+    <style>
+        .contenedor{
+            margin-top: 80px;
+        }
+        .nohayproductos{
+            text-align: center;
+            padding-top: 50px;
+        }
+    </style>
+{% endblock extracss %}
+
+
+{% block body %}
+    <div class="contenedor">
+        <div class="container">
+            {% if pedidos %}
+                {% for pedido in pedidos %}
+                    <div class="pedido">
+                        <h6>Pedido N°: [ {{pedido.id_pedido}} ]</h6>
+                        <h6>Empresa : [ {{pedido.empresa.rznsocial}} ]</h6>
+                    </div>
+                    <div class="detalle">
+                        <table class="table table-bordered table-sm">
+                            <thead>
+                                <th>Codigo</th>
+                                <th>Descripción</th>
+                                <th>Cantidad</th>
+                                <th>Precio</th>
+                                <th>Importe</th>
+                                <th>Acción</th>
+                            </thead>
+                            <tbody>
+                                {% for item in pedidodetalles %}
+                                    {% if item.pedido.id_pedido is pedido.id_pedido %}
+                                        <tr>
+                                            <td>{{item.coproducto}}</td>
+                                            <td>{{item.descripcion}}</td>
+                                            <td>
+                                                <input type="number" value="{{item.cantidad}}">
+                                            </td>
+                                            <td>{{item.precio}}</td>
+                                            <td>{{item.precio}}</td>
+                                            <td>
+                                                <a href="#" class="btn btn-sm btn-danger">Eliminar</a>
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <div class="confirmar">
+                            <a href="{% url 'confirmarcompra' pedido.id_pedido %}" class="btn btn-sm btn-success w-100">Confirmar compra</a>
+                        </div>
+                    </div>
+                    <hr>
+                {% endfor %}
+            {% else %}
+                <div class="nohayproductos">
+                    <div class="alert alert-info" role="alert">
+                        NO tiene productos agregados al carrito de compras
+                      </div>
+                </div>
+            {% endif %}    
+        </div>
+    </div>
+
+
+{% endblock body %}

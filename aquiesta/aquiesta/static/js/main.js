@@ -26,9 +26,11 @@ $(document).ready(function(){
             cancelButtonText: "No, cancelar",
             animation: "slide-from-top",
             closeOnConfirm: false 
-        },function(){
+        }
+        ,function(){
             window.location=LinkExitSystem; 
-        });  
+        });
+        
     });
     
     $('.search-book-button').click(function(e){

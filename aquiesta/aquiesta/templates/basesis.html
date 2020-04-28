@@ -31,7 +31,7 @@
     <script src="../static/sistema/js/bootstrap.min.js"></script>
     <script src="../static/sistema/js/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="../static/sistema/js/main.js"></script>
-
+    
     <style>
         .titulosistema{
             background-color:#3F51B5;
@@ -102,9 +102,11 @@
                 <li style="color:#fff; cursor:default;">
                     <span class="all-tittles">{{request.user.username}}</span>
                 </li>
-                <li  class="tooltips-general exit-system-button" data-href="#" data-placement="bottom" title="Salir del sistema">
+                <!-- <li  class="tooltips-general exit-system-button" data-href="#" data-placement="bottom" title="Salir del sistema"> -->
+                <li  class="tooltips-general cerrarsesion" data-href="#" data-placement="bottom" title="Salir del sistema" onclick="cerrarsesion()">
                     <i class="zmdi zmdi-power"></i>
                 </li>
+
                 <li  class="tooltips-general btn-help" data-placement="bottom" title="Ayuda">
                     <i class="zmdi zmdi-help-outline zmdi-hc-fw"></i>
                 </li>
@@ -142,6 +144,14 @@
     </div>
 
     {% block extrajs %}
+        <script>
+            function cerrarsesion(){
+                respuesta = confirm("Estas seguro de cerrar sesión")
+                if(respuesta){
+                    document.location.href="{% url 'siscerrarsesion' %}"
+                }
+            }
+        </script>
     {% endblock extrajs %}
 </body>
 </html>

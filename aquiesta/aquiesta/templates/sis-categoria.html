@@ -30,7 +30,7 @@
         <div class="container-fluid">
             <div class="">
                 <h2 class="text-left all-tittles titulo-mtto">listado de categorias</h2>
-                <button class="btn btn-primary btn-sm btn-nuevo">Nueva categoria</button>
+                <button class="btn btn-primary btn-sm btn-nuevo" onclick="abrir_modal_mtto('{% url 'siscategoriacrear' %}')">Nueva categoria</button>
             </div>
 
             <div class="div-table">
@@ -51,4 +51,18 @@
                 {% endfor %}
             </div>
         </div>
+
+        
+        <div class="modal fade" id="mtto" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 {% endblock body %}
+
+{% block extrajs %}
+    <script>
+        var $ = jQuery.noConflict();
+        function abrir_modal_mtto(url){
+            $('#mtto').load(url, function(){
+                $(this).modal('show');
+            });
+        }
+    </script>
+{% endblock extrajs %}

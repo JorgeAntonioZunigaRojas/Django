@@ -1,15 +1,34 @@
 from django.shortcuts import render
 # Create your views here.
 from django.core.exceptions import ObjectDoesNotExist
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, ListView, CreateView, View
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-from gestion.forms import CrearUsuarioForm
+from gestion.forms import CrearUsuarioForm, CategoriaForm
 from gestion.models import Producto, Empresa, Productodetalle, Usuario, Pedido, Pedidodetalle, Categoria
+
+
+class sisCategoriaCrear(CreateView):
+    template_name = 'sis-categoria-mtto.html'
+    model = Categoria
+    form_class = CategoriaForm
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid:
+            print(self.model.empresa)
+            self.model['empresa'] = 1
+            form.save()
+            return redirect('siscategoria')
+
+
+@login_required(login_url='iniciarsesionempresa')
+def sisCerrarSesion(request):
+    logout(request)
+    return redirect('iniciarsesionempresa')
 
 def get_contexto(request):
     contexto = {}

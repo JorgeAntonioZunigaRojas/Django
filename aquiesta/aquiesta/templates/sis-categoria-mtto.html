@@ -1,0 +1,42 @@
+<style>
+    .modal-body{
+        overflow-y: hidden;
+    }
+    .modal-title{
+        display: inline-block;
+    }
+    .modal-dialog{
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .etiqueta{
+        font-weight: normal;
+    }
+</style>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">NUEVA Categoria</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form method="POST" action="{% url 'siscategoriacrear' %}">
+            {% csrf_token %}
+            <div class="modal-body">    
+                <div class="form-group">
+                    <label for="empresa" class="etiqueta" >Empresa:</label>
+                    {{ form.empresa }}
+                </div>
+                <div class="form-group">
+                    <label for="nombre" class="etiqueta" >Nombre:</label>
+                    {{ form.nombre }}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
+            </div>
+        </form>
+    </div>
+</div>

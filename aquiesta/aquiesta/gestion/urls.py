@@ -15,5 +15,8 @@ urlpatterns = [
     path('iniciarsesionempresa/', views.iniciarsesionempresa, name = 'iniciarsesionempresa'),
     path('sisinicio/', views.sisInicio, name = 'sisinicio'),
     path('siscategoria/', views.sisCategoria, name = 'siscategoria'),
+    path('siscerrarsesion/', views.sisCerrarSesion, name = 'siscerrarsesion'),
+    path('siscategoriacrear/', views.sisCategoriaCrear.as_view(),name='siscategoriacrear'),
+    
 ]
 

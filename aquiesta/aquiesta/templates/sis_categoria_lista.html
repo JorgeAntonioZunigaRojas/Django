@@ -30,7 +30,7 @@
         <div class="container-fluid">
             <div class="">
                 <h2 class="text-left all-tittles titulo-mtto">listado de categorias</h2>
-                <button class="btn btn-primary btn-sm btn-nuevo" onclick="abrir_modal_mtto('{% url 'siscategoriacrear' %}')">Nueva categoria</button>
+                <button class="btn btn-primary btn-sm btn-nuevo" onclick="abrir_modal_crear('{% url 'siscategoriacrear' %}')">Nueva categoria</button>
             </div>
 
             <div class="div-table">
@@ -44,23 +44,32 @@
                         <div class="div-table-cell">{{ categoria.id_categoria }}</div>
                         <div class="div-table-cell alinearizquierda">{{categoria.nombre}}</div>
                         <div class="div-table-cell alinearderecha">
-                            <button class="btn btn-success btn-sm btn-editar">Editar</button>
-                            <button class="btn btn-danger btn-sm btn-eliminar">Eliminar</button>&nbsp;&nbsp;
+                            
+                            <button class="btn btn-success btn-sm btn-editar" onclick="abrir_modal_editar('{% url 'siscategoriaeditar' categoria.id_categoria %}')">Editar</button>
+                            <a href="{% url 'siscategoriaeliminar' categoria.id_categoria %}" class="btn btn-danger btn-sm btn-eliminar"> Eliminar</a>&nbsp;&nbsp;
+
+
                         </div>
                     </div>
                 {% endfor %}
             </div>
         </div>
 
+        <div class="modal fade" id="modal_editar" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true"></div>
+        <div class="modal fade" id="modal_crear" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true"></div>
         
-        <div class="modal fade" id="mtto" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 {% endblock body %}
 
 {% block extrajs %}
     <script>
         var $ = jQuery.noConflict();
-        function abrir_modal_mtto(url){
-            $('#mtto').load(url, function(){
+        function abrir_modal_crear(url){
+            $('#modal_crear').load(url, function(){
+                $(this).modal('show');
+            });
+        }
+        function abrir_modal_editar(url){
+            $('#modal_editar').load(url, function(){
                 $(this).modal('show');
             });
         }

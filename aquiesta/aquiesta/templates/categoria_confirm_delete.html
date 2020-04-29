@@ -1,0 +1,29 @@
+{% extends 'basesis.html' %}
+{% block titulo %}
+    AQuiEsta - Confirmacion de Eliminación
+{% endblock titulo %}
+
+{% block extracss %}
+    <style>
+        .contenido{
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+    </style>
+{% endblock extracss %}
+
+{% block body %}
+    <div class="contenido">
+        <form action="" method="POST">
+            {% csrf_token %}
+            <p>
+                <strong>¿Desea ELIMINAR la categoria [ {{ categoria }} ]?</strong>
+            </p>
+            <button type="submit" class="btn btn-danger">Confirmar Eliminación</button>
+            <a href="{% url 'siscategoria' %}" class="btn btn-primary">Cancelar Eliminación</a>
+        </form>
+    </div>    
+{% endblock body %}
+
+{% block extrajs %}
+{% endblock extrajs %}

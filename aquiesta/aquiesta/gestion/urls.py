@@ -13,10 +13,11 @@ urlpatterns = [
     path('pedidoproceso/' , views.pedidoproceso, name = 'pedidoproceso'),
     path('confirmarcompra/<int:id>' , views.confirmarcompra, name = 'confirmarcompra'),
     path('iniciarsesionempresa/', views.iniciarsesionempresa, name = 'iniciarsesionempresa'),
-    path('sisinicio/', views.sisInicio, name = 'sisinicio'),
-    path('siscategoria/', views.sisCategoria, name = 'siscategoria'),
     path('siscerrarsesion/', views.sisCerrarSesion, name = 'siscerrarsesion'),
-    path('siscategoriacrear/', views.sisCategoriaCrear.as_view(),name='siscategoriacrear'),
-    
+    path('sisinicio/', views.sisInicio, name = 'sisinicio'),
+    path('siscategoria/', views.sis_categoria_lista, name = 'siscategoria'),
+    path('siscategoriacrear/', views.sis_categoria_crear,name='siscategoriacrear'),
+    path('siscategoriaeditar/<int:id>', views.sis_categoria_editar,name='siscategoriaeditar'),
+    path('siscategoriaeliminar/<int:id>', views.sis_categoria_eliminar,name='siscategoriaeliminar'),
 ]
 

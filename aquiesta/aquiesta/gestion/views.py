@@ -1,7 +1,8 @@
 from django.shortcuts import render
 # Create your views here.
+
 from django.core.exceptions import ObjectDoesNotExist
-from django.views.generic import TemplateView, ListView, CreateView, View
+from django.views.generic import TemplateView, ListView, CreateView, View, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login, logout
@@ -11,19 +12,48 @@ from django.contrib.auth.decorators import login_required
 from gestion.forms import CrearUsuarioForm, CategoriaForm
 from gestion.models import Producto, Empresa, Productodetalle, Usuario, Pedido, Pedidodetalle, Categoria
 
+#class sis_categoria_eliminar(DeleteView):
+#    model = Categoria
+#    success_url = reverse_lazy('siscategoria')
 
-class sisCategoriaCrear(CreateView):
-    template_name = 'sis-categoria-mtto.html'
-    model = Categoria
-    form_class = CategoriaForm
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
-        if form.is_valid:
-            print(self.model.empresa)
-            self.model['empresa'] = 1
-            form.save()
-            return redirect('siscategoria')
+@login_required(login_url='iniciarsesionempresa')
+def sis_categoria_eliminar(request, id):
+    categoria = Categoria.objects.get(id_categoria=id)
+    contexto = get_contexto(request)
+    contexto['categoria'] = categoria
+    if request.method=='POST':
+        categoria.delete()
+        return redirect('siscategoria')
+    return render(request,'categoria_confirm_delete.html', contexto)
 
+@login_required(login_url='iniciarsesionempresa')
+def sis_categoria_editar(request, id):
+    error = []
+    categoria_form = []
+    try:
+        categoria=Categoria.objects.get(id_categoria=id)
+        if request.method == 'GET':
+            categoria_form = CategoriaForm(instance=categoria)
+        else:
+            categoria_form = CategoriaForm(request.POST, instance=categoria)
+            if categoria_form.is_valid():
+                categoria_form.save()
+                return redirect('siscategoria')
+    except ObjectDoesNotExist as e:
+        error = e
+    return render(request, 'sis_categoria_editar.html', {'form':categoria_form, 'id_categoria': id, 'error': error})
+
+@login_required(login_url='iniciarsesionempresa')
+def sis_categoria_crear(request):
+    categoria_form = CategoriaForm()
+    if request.method=='POST':
+        contexto = get_contexto(request)
+        empresa = contexto['empresa']
+        ca_nombre = request.POST.get('nombre')
+        categoria_form = Categoria(empresa=empresa, nombre=ca_nombre)
+        categoria_form.save()
+        return redirect('siscategoria')
+    return render(request, 'sis_categoria_crear.html', {'form': categoria_form})
 
 @login_required(login_url='iniciarsesionempresa')
 def sisCerrarSesion(request):
@@ -42,11 +72,11 @@ def get_contexto(request):
     return contexto
 
 @login_required(login_url='iniciarsesionempresa')
-def sisCategoria(request):
+def sis_categoria_lista(request):
     contexto = get_contexto(request)
     empresa = contexto['empresa']
     contexto['categorias'] = Categoria.objects.filter(empresa__id_empresa=empresa.id_empresa)
-    return render(request, 'sis-categoria.html', contexto)
+    return render(request, 'sis_categoria_lista.html', contexto)
 
 @login_required(login_url='iniciarsesionempresa')
 def sisInicio(request):
@@ -65,7 +95,7 @@ def sisInicio(request):
     contexto['QCategorias'] = QCategorias
     contexto['QProductos'] = QProductos
 
-    return render(request, 'sis-inicio.html', contexto)
+    return render(request, 'sis_inicio.html', contexto)
 
 def iniciarsesionempresa(request):
     if request.user.is_authenticated:

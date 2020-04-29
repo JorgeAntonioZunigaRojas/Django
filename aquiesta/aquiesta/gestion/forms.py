@@ -13,7 +13,7 @@ class CrearUsuarioForm(UserCreationForm):
 class CategoriaForm(forms.ModelForm):
     class Meta:
         model = Categoria
-        fields = ['empresa', 'nombre']
+        fields = ['nombre']
         label={
             'nombre':'Nombre',
         }
@@ -23,13 +23,6 @@ class CategoriaForm(forms.ModelForm):
                     'class': 'form-control',
                     'placeholder': 'Ingrese nombre de categoria',
                     'id': 'nombre',
-                }
-            ),
-            'empresa': forms.TextInput(
-                attrs={
-                    'class': 'form-control',
-                    'placeholder': 'Ingrese ID de empresa',
-                    'id': 'empresa',
                 }
             ),
         }

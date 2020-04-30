@@ -19,5 +19,8 @@ urlpatterns = [
     path('siscategoriacrear/', views.sis_categoria_crear,name='siscategoriacrear'),
     path('siscategoriaeditar/<int:id>', views.sis_categoria_editar,name='siscategoriaeditar'),
     path('siscategoriaeliminar/<int:id>', views.sis_categoria_eliminar,name='siscategoriaeliminar'),
+    path('sisproductolista/', views.sis_producto_lista, name = 'sisproductolista'),
+    path('sisproductoeliminar/<int:id>', views.sis_producto_eliminar,name='sisproductoeliminar'),
+    
 ]
 

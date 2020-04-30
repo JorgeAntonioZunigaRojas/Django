@@ -12,9 +12,24 @@ from django.contrib.auth.decorators import login_required
 from gestion.forms import CrearUsuarioForm, CategoriaForm
 from gestion.models import Producto, Empresa, Productodetalle, Usuario, Pedido, Pedidodetalle, Categoria
 
-#class sis_categoria_eliminar(DeleteView):
-#    model = Categoria
-#    success_url = reverse_lazy('siscategoria')
+
+
+@login_required(login_url='iniciarsesionempresa')
+def sis_producto_eliminar(request, id):
+    producto = Producto.objects.get(id_producto=id)
+    contexto = get_contexto(request)
+    contexto['producto'] = producto
+    if request.method=='POST':
+        producto.delete()
+        return redirect('sisproductolista')
+    return render(request, 'producto_confirm_delete.html', contexto)
+
+@login_required(login_url='iniciarsesionempresa')
+def sis_producto_lista(request):
+    contexto = get_contexto(request)
+    id_empresa = contexto['id_empresa']
+    contexto['productos'] = Producto.objects.filter(categoria__empresa__id_empresa=id_empresa).values('id_producto', 'codigo', 'nombre', 'categoria__nombre', 'moneda__abreviatura', 'precio', 'imagen')
+    return render(request, 'sis_producto_lista.html', contexto)
 
 @login_required(login_url='iniciarsesionempresa')
 def sis_categoria_eliminar(request, id):
@@ -43,6 +58,7 @@ def sis_categoria_editar(request, id):
         error = e
     return render(request, 'sis_categoria_editar.html', {'form':categoria_form, 'id_categoria': id, 'error': error})
 
+
 @login_required(login_url='iniciarsesionempresa')
 def sis_categoria_crear(request):
     categoria_form = CategoriaForm()
@@ -54,6 +70,15 @@ def sis_categoria_crear(request):
         categoria_form.save()
         return redirect('siscategoria')
     return render(request, 'sis_categoria_crear.html', {'form': categoria_form})
+
+
+
+@login_required(login_url='iniciarsesionempresa')
+def sis_categoria_lista(request):
+    contexto = get_contexto(request)
+    empresa = contexto['empresa']
+    contexto['categorias'] = Categoria.objects.filter(empresa__id_empresa=empresa.id_empresa).order_by('nombre')
+    return render(request, 'sis_categoria_lista.html', contexto)
 
 @login_required(login_url='iniciarsesionempresa')
 def sisCerrarSesion(request):
@@ -70,13 +95,6 @@ def get_contexto(request):
     contexto['usuario'] = usuario
     contexto['id_empresa'] = id_empresa
     return contexto
-
-@login_required(login_url='iniciarsesionempresa')
-def sis_categoria_lista(request):
-    contexto = get_contexto(request)
-    empresa = contexto['empresa']
-    contexto['categorias'] = Categoria.objects.filter(empresa__id_empresa=empresa.id_empresa)
-    return render(request, 'sis_categoria_lista.html', contexto)
 
 @login_required(login_url='iniciarsesionempresa')
 def sisInicio(request):

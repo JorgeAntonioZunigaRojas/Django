@@ -9,7 +9,6 @@ class CrearUsuarioForm(UserCreationForm):
         model = User
         fields = ['id','username', 'email', 'password1', 'password2']
 
-
 class CategoriaForm(forms.ModelForm):
     class Meta:
         model = Categoria
@@ -26,3 +25,9 @@ class CategoriaForm(forms.ModelForm):
                 }
             ),
         }
+
+class ProductoForm(forms.ModelForm):
+    class Meta:
+        model = Producto
+        fields = ['categoria', 'codigo', 'nombre', 'moneda', 'precio', 'imagen']
+

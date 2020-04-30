@@ -1,6 +1,6 @@
 {% extends 'basesis.html' %}
 {% block titulo %}
-    AQuiEsta - Categorias
+    AQuiEsta - Productos
 {% endblock titulo %}
 
 {% block extracss %}
@@ -23,32 +23,42 @@
         .titulo-mtto{
             display: inline-block;
         }
+        .imagenproducto{
+            height: 100%;
+        }
     </style>
 {% endblock extracss %}
 
 {% block body %}
         <div class="container-fluid">
             <div class="">
-                <h2 class="text-left all-tittles titulo-mtto">listado de categorias</h2>
-                <button class="btn btn-primary btn-sm btn-nuevo" onclick="abrir_modal_crear('{% url 'siscategoriacrear' %}')">Nueva categoria</button>
+                <h2 class="text-left all-tittles titulo-mtto">listado de productos</h2>
+                <button class="btn btn-primary btn-sm btn-nuevo" onclick="abrir_modal_crear('{% url 'siscategoriacrear' %}')">Nuevo producto</button>
             </div>
 
             <div class="div-table">
                 <div class="div-table-row div-table-head">
                     <div class="div-table-cell">#</div>
+                    <div class="div-table-cell alinearizquierda">Codigo</div>
                     <div class="div-table-cell alinearizquierda">Nombre</div>
+                    <div class="div-table-cell alinearizquierda">Categoria</div>
+                    <div class="div-table-cell alinearizquierda">Precio</div>
+                    <div class="div-table-cell alinearizquierda">Imagen</div>
                     <div class="div-table-cell alinearderecha">Operación&nbsp;&nbsp;</div>
                 </div>
-                {% for categoria in categorias %}
+                {% for producto in productos %}
                     <div class="div-table-row">
-                        <div class="div-table-cell">{{ categoria.id_categoria }}</div>
-                        <div class="div-table-cell alinearizquierda">{{categoria.nombre}}</div>
+                        <div class="div-table-cell">{{ producto.id_producto }}</div>
+                        <div class="div-table-cell alinearizquierda">{{producto.codigo}}</div>
+                        <div class="div-table-cell alinearizquierda">{{producto.nombre}}</div>
+                        <div class="div-table-cell alinearizquierda">{{producto.categoria__nombre}}</div>
+                        <div class="div-table-cell alinearizquierda">{{producto.moneda__abreviatura}} {{producto.precio}}</div>
+                        <div class="div-table-cell alinearizquierda">
+                            <img src="../static/{{producto.imagen}}" alt="Imagen" class="imagenproducto">
+                        </div>
                         <div class="div-table-cell alinearderecha">
-                            
-                            <button class="btn btn-success btn-sm btn-editar" onclick="abrir_modal_editar('{% url 'siscategoriaeditar' categoria.id_categoria %}')">Editar</button>
-                            <a href="{% url 'siscategoriaeliminar' categoria.id_categoria %}" class="btn btn-danger btn-sm btn-eliminar"> Eliminar</a>&nbsp;&nbsp;
-
-
+                            <button class="btn btn-success btn-sm btn-editar" onclick="abrir_modal_editar('{% url 'siscategoriaeditar' producto.id_producto %}')">Editar</button>
+                            <a href="{% url 'sisproductoeliminar' producto.id_producto %}" class="btn btn-danger btn-sm btn-eliminar"> Eliminar</a>&nbsp;&nbsp;
                         </div>
                     </div>
                 {% endfor %}

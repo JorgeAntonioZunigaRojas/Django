@@ -16,8 +16,9 @@
             height: 320px;
         }
         .producto{
-            width: 100%;
+            width: 90%;
             height: 320px;
+            
         }
         .empresa_imagen{
             width: 100%;
@@ -54,6 +55,9 @@
         }
         .par{
             background-color:#EFEFEF;
+        }
+        .contenedor-producto-imagen{
+            text-align: center;
         }
         .contenedor-producto-imagen,
         .contenedor-mapa-imagen,
@@ -135,7 +139,7 @@
         <div class="container">
             <div class="row fila1" >
                 <div class="col-4 p-1 contenedor-producto-imagen">    
-                    <img class="producto" src="../static/img/imagen_no_disponible.png" alt="">
+                    <img class="producto" src="../media/{{producto.imagen}}" alt="">
                 </div>
                 <div class="col-8 p-1 contenedor-mapa-imagen">
                     <img class="mapa" src="../static/img/mapa.png" alt="">

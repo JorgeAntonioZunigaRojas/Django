@@ -23,6 +23,17 @@
         .titulo-mtto{
             display: inline-block;
         }
+        .div-table{
+            margin-bottom: 0px;
+            margin-top: 5px;
+        }
+        .form-group-buscar{
+            margin-bottom: 0;
+        }
+        .input-buscar,
+        .btn-buscar-producto{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
     </style>
 {% endblock extracss %}
 
@@ -32,6 +43,15 @@
                 <h2 class="text-left all-tittles titulo-mtto">listado de categorias</h2>
                 <button class="btn btn-primary btn-sm btn-nuevo" onclick="abrir_modal_crear('{% url 'siscategoriacrear' %}')">Nueva categoria</button>
             </div>
+
+            <form method="GET">
+                <div class="form-group row form-group-buscar">
+                  <div class="col-sm-12 col-lg-11">
+                    <input type="text" class="form-control form-control-sm input-buscar" id="buscar" name="buscar" placeholder="Buscar producto en la lista" value="{{ request.GET.buscar }}">
+                  </div>
+                  &nbsp<button type="submit" class="btn btn-warning btn-sm btn-buscar-producto">Buscar categoria</button>
+                </div>
+              </form>
 
             <div class="div-table">
                 <div class="div-table-row div-table-head">
@@ -44,14 +64,41 @@
                         <div class="div-table-cell">{{ categoria.id_categoria }}</div>
                         <div class="div-table-cell alinearizquierda">{{categoria.nombre}}</div>
                         <div class="div-table-cell alinearderecha">
-                            
                             <button class="btn btn-success btn-sm btn-editar" onclick="abrir_modal_editar('{% url 'siscategoriaeditar' categoria.id_categoria %}')">Editar</button>
                             <a href="{% url 'siscategoriaeliminar' categoria.id_categoria %}" class="btn btn-danger btn-sm btn-eliminar"> Eliminar</a>&nbsp;&nbsp;
-
-
                         </div>
                     </div>
                 {% endfor %}
+            </div>
+
+            <div class="mt-2">
+                <ul class="pagination">
+                    {% if categorias.has_previous %}
+                        <li class="page-item">
+                            <a href="?page={{ categorias.previous_page_number }}" class="page-link">Anterior</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <a href="#" class="page-link">Anterior</a>
+                        </li>
+                    {% endif %}
+                    
+                    {% for i in categorias.paginator.page_range %}
+                            <li class="page-item {% if categorias.number == i %} active {% endif %} ">
+                                <a href="?page={{ i }}" class="page-link">{{i}}</a>
+                            </li>
+                    {% endfor %}
+
+                    {% if categorias.has_next %}
+                        <li class="page-item">
+                            <a href="?page={{ categorias.next_page_number }}" class="page-link">Siguiente</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <a href="#" class="page-link">Siguiente</a>
+                        </li>
+                    {% endif %}
+                </ul>
             </div>
         </div>
 

@@ -8,11 +8,43 @@ from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+from django.core.paginator import Paginator
 
-from gestion.forms import CrearUsuarioForm, CategoriaForm
-from gestion.models import Producto, Empresa, Productodetalle, Usuario, Pedido, Pedidodetalle, Categoria
+from gestion.forms import CrearUsuarioForm, CategoriaForm, ProductoForm
+from gestion.models import Producto, Empresa, Productodetalle, Usuario, Pedido, Pedidodetalle, Categoria, Moneda
+from django.db.models import Q
 
+@login_required(login_url='iniciarsesionempresa')
+def sis_producto_editar(request, id):
+    error = []
+    producto_form = []
+    try:
+        producto = Producto.objects.get(id_producto=id)
+        if request.method=='GET':
+            producto_form = ProductoForm(instance=producto)
+        else:
+            producto_form = ProductoForm(request.POST, request.FILES, instance=producto)
+            if producto_form.is_valid():
+                producto_form.save()
+                return redirect('sisproductolista')
+    except ObjectDoesNotExist as e:
+        error = e
+    return render(request, 'sis_producto_editar.html', {'form': producto_form, 'id_producto': id, 'error': error})
 
+@login_required(login_url='iniciarsesionempresa')
+def sis_producto_crear(request):
+    producto_form = ProductoForm()
+    id_empresa = get_contexto(request)['id_empresa']
+    categoria = Categoria.objects.filter(empresa__id_empresa=id_empresa)
+    if request.method == 'POST':
+        producto_form = ProductoForm(request.POST, request.FILES)
+        if producto_form.is_valid():
+            producto_form.save()
+            return redirect('sisproductolista')
+        else:
+            return HttpResponse("""your form is wrong, reload on <a href = "{{ url : 'sisproductolista'}}">reload</a>""")
+    return render(request,'sis_producto_crear.html', {'form':producto_form, 'categorias': categoria})
 
 @login_required(login_url='iniciarsesionempresa')
 def sis_producto_eliminar(request, id):
@@ -26,10 +58,24 @@ def sis_producto_eliminar(request, id):
 
 @login_required(login_url='iniciarsesionempresa')
 def sis_producto_lista(request):
+    print(request.GET)
+    consulta = request.GET.get('buscar')
     contexto = get_contexto(request)
     id_empresa = contexto['id_empresa']
-    contexto['productos'] = Producto.objects.filter(categoria__empresa__id_empresa=id_empresa).values('id_producto', 'codigo', 'nombre', 'categoria__nombre', 'moneda__abreviatura', 'precio', 'imagen')
+
+    productos = Producto.objects.filter(categoria__empresa__id_empresa=id_empresa)
+    if consulta:
+        productos = productos.filter(Q(nombre__icontains = consulta) | Q(codigo__icontains = consulta) | Q(categoria__nombre__icontains = consulta))
+
+    productos = productos.values('id_producto', 'codigo', 'nombre', 'categoria__nombre', 'moneda__abreviatura', 'precio', 'imagen').order_by('-fecha_edicion','nombre')
+    paginador = Paginator(productos, 16)
+    page = request.GET.get('page')
+    productos = paginador.get_page(page)
+    contexto['productos'] = productos
+    print(contexto)
     return render(request, 'sis_producto_lista.html', contexto)
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
 @login_required(login_url='iniciarsesionempresa')
 def sis_categoria_eliminar(request, id):
@@ -58,7 +104,6 @@ def sis_categoria_editar(request, id):
         error = e
     return render(request, 'sis_categoria_editar.html', {'form':categoria_form, 'id_categoria': id, 'error': error})
 
-
 @login_required(login_url='iniciarsesionempresa')
 def sis_categoria_crear(request):
     categoria_form = CategoriaForm()
@@ -71,13 +116,19 @@ def sis_categoria_crear(request):
         return redirect('siscategoria')
     return render(request, 'sis_categoria_crear.html', {'form': categoria_form})
 
-
-
 @login_required(login_url='iniciarsesionempresa')
 def sis_categoria_lista(request):
+    consulta = request.GET.get('buscar')
     contexto = get_contexto(request)
     empresa = contexto['empresa']
-    contexto['categorias'] = Categoria.objects.filter(empresa__id_empresa=empresa.id_empresa).order_by('nombre')
+    categorias = Categoria.objects.filter(empresa__id_empresa=empresa.id_empresa)
+    if consulta:
+        categorias = categorias.filter(nombre__icontains = consulta)
+    categorias = categorias.order_by('-fecha_edicion')
+    paginador = Paginator(categorias, 16)
+    page = request.GET.get('page')
+    categorias = paginador.get_page(page)
+    contexto['categorias'] = categorias
     return render(request, 'sis_categoria_lista.html', contexto)
 
 @login_required(login_url='iniciarsesionempresa')
@@ -254,7 +305,7 @@ class inicio(ListView):
     model = Producto
     template_name = 'principal.html'
     def get_queryset(self, ):
-        return self.model.objects.all().order_by('-nombre', '-fecha_creacion')[:12]
+        return self.model.objects.all().order_by('-fecha_creacion', '-nombre')[:12]
     def get_context_data(self, request, **kwargs):
         contexto = {}
         contexto['productos'] = self.get_queryset()

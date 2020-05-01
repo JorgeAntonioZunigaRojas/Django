@@ -19,6 +19,8 @@ class Usuario(models.Model):
     ubigeo = models.ForeignKey(Ubigeo, models.DO_NOTHING, db_column='id_ubigeo', null=True)
     telefono = models.CharField(max_length=200, blank=True, null=True)
     imagen = models.CharField(max_length=200, blank=True, null=True)
+    fecha_creacion=models.DateTimeField('Fecha de creación', auto_now=False, auto_now_add=True)
+    fecha_edicion=models.DateTimeField('Fecha de edición', auto_now=True, auto_now_add=False)
 
     class Meta:
         db_table = 'usuario'
@@ -38,6 +40,8 @@ class Empresa(models.Model):
     imagen = models.CharField(max_length=200, blank=True, null=True)
     logo = models.CharField(max_length=200, blank=True, null=True)
     st_sgestion = models.CharField(max_length=200, default='EMITIDA')
+    fecha_creacion=models.DateTimeField('Fecha de creación', auto_now=False, auto_now_add=True)
+    fecha_edicion=models.DateTimeField('Fecha de edición', auto_now=True, auto_now_add=False)
 
     class Meta:
         db_table = 'empresa'
@@ -49,6 +53,8 @@ class Categoria(models.Model):
     id_categoria = models.AutoField(primary_key=True)
     empresa = models.ForeignKey('Empresa', models.DO_NOTHING, db_column='id_empresa', blank=True, null=True)
     nombre = models.CharField(max_length=200, blank=True, null=True)
+    fecha_creacion=models.DateTimeField('Fecha de creación', auto_now=False, auto_now_add=True)
+    fecha_edicion=models.DateTimeField('Fecha de edición', auto_now=True, auto_now_add=False)
 
     class Meta:
         db_table = 'categoria'
@@ -74,8 +80,9 @@ class Producto(models.Model):
     nombre = models.CharField(max_length=200, blank=True, null=True)
     moneda = models.ForeignKey(Moneda, models.DO_NOTHING, db_column='id_moneda', blank=True, null=True)
     precio = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
-    imagen = models.CharField(max_length=200, blank=True, null=True)
-    fecha_creacion=models.DateField('Fecha de creación', auto_now=True, auto_now_add=False)
+    imagen = models.ImageField(upload_to = 'producto', default='static/imagen_no_disponible.png')
+    fecha_creacion=models.DateTimeField('Fecha de creación', auto_now=False, auto_now_add=True)
+    fecha_edicion=models.DateTimeField('Fecha de edición', auto_now=True, auto_now_add=False)
     
     class Meta:
         db_table = 'producto'
@@ -88,7 +95,9 @@ class Productodetalle(models.Model):
     producto = models.ForeignKey(Producto, models.DO_NOTHING, db_column='id_producto', blank=True, null=True)
     clave = models.CharField(max_length=200, blank=True, null=True)
     valor = models.CharField(max_length=200, blank=True, null=True)
-    
+    fecha_creacion=models.DateTimeField('Fecha de creación', auto_now=False, auto_now_add=True)
+    fecha_edicion=models.DateTimeField('Fecha de edición', auto_now=True, auto_now_add=False)
+
     class Meta:
         db_table = 'productodetalle'
 
@@ -113,6 +122,8 @@ class Pedido(models.Model):
     costo_entrega = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
     st_pedido = models.CharField(max_length=200, blank=True, null=True)
     cancelado = models.BooleanField(default=False)
+    fecha_creacion=models.DateTimeField('Fecha de creación', auto_now=False, auto_now_add=True)
+    fecha_edicion=models.DateTimeField('Fecha de edición', auto_now=True, auto_now_add=False)
 
     class Meta:
         db_table = 'pedido'
@@ -128,7 +139,9 @@ class Pedidodetalle(models.Model):
     descripcion = models.CharField(max_length=200, blank=True, null=True)
     cantidad = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
     precio = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
-
+    fecha_creacion=models.DateTimeField('Fecha de creación', auto_now=False, auto_now_add=True)
+    fecha_edicion=models.DateTimeField('Fecha de edición', auto_now=True, auto_now_add=False)
+    
     class Meta:
         db_table = 'pedidodetalle'
 

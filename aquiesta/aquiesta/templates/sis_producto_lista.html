@@ -26,6 +26,17 @@
         .imagenproducto{
             height: 100%;
         }
+        .div-table{
+            margin-bottom: 0px;
+            margin-top: 5px;
+        }
+        .form-group-buscar{
+            margin-bottom: 0;
+        }
+        .input-buscar,
+        .btn-buscar-producto{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
     </style>
 {% endblock extracss %}
 
@@ -33,8 +44,17 @@
         <div class="container-fluid">
             <div class="">
                 <h2 class="text-left all-tittles titulo-mtto">listado de productos</h2>
-                <button class="btn btn-primary btn-sm btn-nuevo" onclick="abrir_modal_crear('{% url 'siscategoriacrear' %}')">Nuevo producto</button>
+                <button class="btn btn-primary btn-sm btn-nuevo" onclick="abrir_modal_crear('{% url 'sisproductocrear' %}')">Nuevo producto</button>
             </div>
+
+            <form method="GET">
+                <div class="form-group row form-group-buscar">
+                  <div class="col-sm-12 col-lg-11">
+                    <input type="text" class="form-control form-control-sm input-buscar" id="buscar" name="buscar" placeholder="Buscar producto en la lista" value="{{ request.GET.buscar }}">
+                  </div>
+                  &nbsp<button type="submit" class="btn btn-warning btn-sm btn-buscar-producto">Buscar producto</button>
+                </div>
+              </form>
 
             <div class="div-table">
                 <div class="div-table-row div-table-head">
@@ -54,17 +74,47 @@
                         <div class="div-table-cell alinearizquierda">{{producto.categoria__nombre}}</div>
                         <div class="div-table-cell alinearizquierda">{{producto.moneda__abreviatura}} {{producto.precio}}</div>
                         <div class="div-table-cell alinearizquierda">
-                            <img src="../static/{{producto.imagen}}" alt="Imagen" class="imagenproducto">
+                            <img src="../media/{{producto.imagen}}" alt="{{producto.imagen}}" class="imagenproducto">
                         </div>
                         <div class="div-table-cell alinearderecha">
-                            <button class="btn btn-success btn-sm btn-editar" onclick="abrir_modal_editar('{% url 'siscategoriaeditar' producto.id_producto %}')">Editar</button>
+                            <button class="btn btn-success btn-sm btn-editar" onclick="abrir_modal_editar('{% url 'sisproductoeditar' producto.id_producto %}')">Editar</button>
                             <a href="{% url 'sisproductoeliminar' producto.id_producto %}" class="btn btn-danger btn-sm btn-eliminar"> Eliminar</a>&nbsp;&nbsp;
                         </div>
                     </div>
                 {% endfor %}
             </div>
-        </div>
+                
+            <div class="mt-2">
+                <ul class="pagination">
 
+                    {% if productos.has_previous %}
+                        <li class="page-item">
+                            <a href="?page={{ productos.previous_page_number }}" class="page-link">Anterior</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <a href="#" class="page-link">Anterior</a>
+                        </li>
+                    {% endif %}
+                    
+                    {% for i in productos.paginator.page_range %}
+                            <li class="page-item {% if productos.number == i %} active {% endif %} ">
+                                <a href="?page={{ i }}" class="page-link">{{i}}</a>
+                            </li>
+                    {% endfor %}
+
+                    {% if productos.has_next %}
+                        <li class="page-item">
+                            <a href="?page={{ productos.next_page_number }}" class="page-link">Siguiente</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <a href="#" class="page-link">Siguiente</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
         <div class="modal fade" id="modal_editar" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true"></div>
         <div class="modal fade" id="modal_crear" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true"></div>
         

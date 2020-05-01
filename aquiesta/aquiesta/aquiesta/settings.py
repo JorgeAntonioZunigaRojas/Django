@@ -118,7 +118,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
 #LANGUAGE_CODE = 'en-us'
-LANGUAGE_CODE = 'es-pe'     #Al cambiar de 'en-us' a 'es-pe' cambia el idioma a español en los mensajes y el aministrador django  sin enmbargo el formato de numeracion tambien cambia y asigna a la "," coma como separador decinmal
+LANGUAGE_CODE = 'es-PE'     #Al cambiar de 'en-us' a 'es-pe' cambia el idioma a español en los mensajes y el aministrador django  sin enmbargo el formato de numeracion tambien cambia y asigna a la "," coma como separador decinmal
 
 TIME_ZONE = 'UTC'
 
@@ -135,6 +135,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (
-    BASE_DIR,'static'
-)
+STATICFILES_DIRS = (BASE_DIR,'static')
+
+#DataFlair #User_Uploaded_Files
+STATIC_ROOT = os.path.join(BASE_DIR, 'static-files')
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+

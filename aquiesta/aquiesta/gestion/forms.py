@@ -30,4 +30,40 @@ class ProductoForm(forms.ModelForm):
     class Meta:
         model = Producto
         fields = ['categoria', 'codigo', 'nombre', 'moneda', 'precio', 'imagen']
-
+        widgets={
+            'categoria': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Seleccione categoria',
+                    'id': 'categoria',
+                }
+            ),
+            'codigo': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Ingrese codigo de producto',
+                    'id': 'codigo',
+                }
+            ),
+            'nombre': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Ingrese nombre de producto',
+                    'id': 'nombre',
+                }
+            ),
+            'moneda': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'seleccione moneda',
+                    'id': 'moneda',
+                }
+            ),
+            'precio': forms.NumberInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Ingrese precio',
+                    'id': 'precio',
+                }
+            ),            
+        }

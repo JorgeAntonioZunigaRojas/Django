@@ -1,0 +1,88 @@
+<style>
+    .modal-body{
+        overflow-y: hidden;
+    }
+    .modal-title{
+        display: inline-block;
+    }
+    .modal-dialog{
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .etiqueta{
+        font-weight: normal;
+    }
+</style>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">EDITAR Usuario</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form method="POST" action="{% url 'sisusuarioeditar' id_usuario %}"  enctype="multipart/form-data" >
+            {% csrf_token %}
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="tipo_doc_ident" class="etiqueta">Tipo de documento identidad:</label>
+                        
+                        <!-- <select name="tipo_doc_ident" id="tipo_doc_ident" class="form-control">
+                            <option value="01">DNI</option>
+                            <option value="04">CARNET DE EXTRANJERIA</option>
+                            <option value="06">RUC</option>
+                            <option value="07">PASAPORTE</option>
+                            <option value="00">OTROS</option>
+                        </select> -->
+                        {{ form.tipo_doc_ident }}
+
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="num_doc_ident" class="etiqueta">Numero de documento identidad:</label>
+                        {{ form.num_doc_ident }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="nombre" class="etiqueta" >Nombre:</label>
+                        {{ form.nombre }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="direccion" class="etiqueta" >Dirección:</label>
+                        {{ form.direccion }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="ubigeo" class="etiqueta" >Distrito:</label>
+                        {{ form.ubigeo }}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="telefono" class="etiqueta" >Telefonos:</label>
+                        {{ form.telefono }}
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="Imagen" class="etiqueta" >Imagen:</label>
+                        {{ form.imagen }}
+                    </div>
+                </div>
+            </div>
+
+            {% if mensaje %}
+                <div class="alert alert-warning" role="alert">
+                    {{mensaje}}
+                </div>
+            {% endif %}
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
+            </div>
+        </form>
+    </div>
+</div>

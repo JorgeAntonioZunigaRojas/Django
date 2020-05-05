@@ -18,7 +18,7 @@ class Usuario(models.Model):
     direccion = models.CharField(max_length=200, blank=True, null=True)
     ubigeo = models.ForeignKey(Ubigeo, models.DO_NOTHING, db_column='id_ubigeo', null=True)
     telefono = models.CharField(max_length=200, blank=True, null=True)
-    imagen = models.CharField(max_length=200, blank=True, null=True)
+    imagen = models.ImageField(upload_to = 'usuario', default='static/usuario.jpg.png')
     fecha_creacion=models.DateTimeField('Fecha de creación', auto_now=False, auto_now_add=True)
     fecha_edicion=models.DateTimeField('Fecha de edición', auto_now=True, auto_now_add=False)
 

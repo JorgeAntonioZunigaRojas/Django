@@ -11,9 +11,43 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.core.paginator import Paginator
 
-from gestion.forms import CrearUsuarioForm, CategoriaForm, ProductoForm
-from gestion.models import Producto, Empresa, Productodetalle, Usuario, Pedido, Pedidodetalle, Categoria, Moneda
+from gestion.forms import CrearUsuarioForm, CategoriaForm, ProductoForm, UsuarioForm
+from gestion.models import Moneda, Ubigeo
+from gestion.models import Producto, Empresa, Productodetalle, Usuario, Pedido, Pedidodetalle, Categoria
 from django.db.models import Q
+
+@login_required(login_url='iniciarsesionempresa')
+def sis_usuario_editar(request, id):
+    error = []
+    usuario_form = []
+    mensaje = ''
+    #sql_query = "select id_ubigeo, nombre from ubigeo where left(id_ubigeo,4)='1401' and id_ubigeo<>'140100' order by nombre"
+    #distritos = Ubigeo.objects.raw(sql_query)
+    distritos = Ubigeo.objects.filter(id_ubigeo__contains='1401').exclude(id_ubigeo='140100')
+
+    try:
+        usuario = Usuario.objects.get(id_usuario=id)
+        if request.method == 'GET':
+            usuario_form = UsuarioForm(instance=usuario)
+        else:
+            usuario_form = UsuarioForm(request.POST, request.FILES, instance=usuario)
+            if usuario_form.is_valid():
+                usuario_form.save()
+                return redirect('sisusuariomtto')
+            else:
+                mensaje = 'Datos incompletos...!!!'
+
+    except ObjectDoesNotExist as e:
+        error = e
+    return render(request, 'sis_usuario_editar.html', {'form':usuario_form, 'id_usuario': id, 'error': error, 'mensaje':mensaje, 'distritos':distritos, 'usuario':usuario})
+
+@login_required(login_url='iniciarsesionempresa')
+def sis_usuario_mtto(request):
+    contexto = get_contexto(request)
+    usuario = Usuario.objects.get(id_usuario=request.user.id)
+    contexto['form']= UsuarioForm(instance=usuario)
+    contexto['usuario']= usuario
+    return render(request,'sis_usuario_mtto.html', contexto)
 
 @login_required(login_url='iniciarsesionempresa')
 def sis_producto_editar(request, id):

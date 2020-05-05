@@ -32,6 +32,7 @@
     <script src="../static/sistema/js/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="../static/sistema/js/main.js"></script>
     
+    
     <style>
         .titulosistema{
             background-color:#3F51B5;
@@ -76,7 +77,7 @@
                             <li><a href="{% url 'siscategoria' %}"><i class="zmdi zmdi-bookmark-outline zmdi-hc-fw"></i>&nbsp;&nbsp; Categorias</a></li>
                         </ul>
                     </li>
-                    <li><a href="#"><i class="zmdi zmdi-account-add zmdi-hc-fw"></i>&nbsp;&nbsp; Usuario </a></li>
+                    <li><a href="{% url 'sisusuariomtto' %}"><i class="zmdi zmdi-account-add zmdi-hc-fw"></i>&nbsp;&nbsp; Usuario </a></li>
                     <li>
                         <div class="dropdown-menu-button"><i class="zmdi zmdi-trending-up zmdi-hc-fw"></i>&nbsp;&nbsp; Reportes y estadísticas <i class="zmdi zmdi-chevron-down pull-right zmdi-hc-fw"></i></div>
                         <ul class="list-unstyled">
@@ -97,7 +98,7 @@
         <nav class="navbar-user-top full-reset">
             <ul class="list-unstyled full-reset">
                 <figure>
-                   <img src="{% static usuario.imagen %}" alt="Usuario-Imagen" class="img-responsive img-circle center-box">
+                   <img src="../media/{{usuario.imagen}}" alt="Usuario-Imagen" class="img-responsive img-circle center-box">
                 </figure>
                 <li style="color:#fff; cursor:default;">
                     <span class="all-tittles">{{request.user.username}}</span>

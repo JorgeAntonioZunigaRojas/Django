@@ -24,30 +24,15 @@ urlpatterns = [
 
     path('sisproductolista/', views.sis_producto_lista, name = 'sisproductolista'),
     path('sisproductoeliminar/<int:id>', views.sis_producto_eliminar,name='sisproductoeliminar'),
-
     path('sisproductocrear/', views.sis_producto_crear,name='sisproductocrear'),
     path('sisproductoeditar/<int:id>', views.sis_producto_editar,name='sisproductoeditar'),
     
+    path('sisusuariomtto/', views.sis_usuario_mtto, name='sisusuariomtto'),
+    path('sisusuarioeditar/<int:id>', views.sis_usuario_editar,name='sisusuarioeditar'),
 ]
 if DEBUG:
     urlpatterns += static(STATIC_URL, document_root = STATIC_ROOT)
     urlpatterns += static(MEDIA_URL, document_root = MEDIA_ROOT)
-
-
-"""
-from django.urls import path, include
-from . import settings
-from django.contrib.staticfiles.urls import static
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('gallery/', include(('gallery.urls','gallery'))),
-]
-urlpatterns += staticfiles_urlpatterns()
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 
-"""
-
 
 
 

@@ -67,3 +67,48 @@ class ProductoForm(forms.ModelForm):
                 }
             ),            
         }
+
+class UsuarioForm(forms.ModelForm):
+    class Meta:
+        model = Usuario
+        fields = ['tipo_doc_ident','num_doc_ident','nombre','direccion','ubigeo','telefono','imagen']
+        widgets={
+            'tipo_doc_ident': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'id': 'tipo_doc_ident',
+                }
+            ),
+            'num_doc_ident': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'id': 'num_doc_ident',
+                }
+            ),            
+            'nombre': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'id': 'nombre',
+                }
+            ),
+            'direccion': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'id': 'direccion',
+                }
+            ),
+            'ubigeo': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'id': 'ubigeo',
+                }
+            ),
+            'telefono': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'id': 'telefono',
+                }
+            ),
+
+        }
+    

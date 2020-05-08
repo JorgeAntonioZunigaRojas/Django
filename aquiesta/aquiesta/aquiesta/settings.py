@@ -85,7 +85,7 @@ DATABASES = {
 DATABASES = {
     'default': {
     'ENGINE': 'django.db.backends.mysql',
-    'NAME': 'aquiesta',
+    'NAME': 'aquiestav3',
     'USER': 'root',
     'PASSWORD': '',
     'HOST': 'localhost',

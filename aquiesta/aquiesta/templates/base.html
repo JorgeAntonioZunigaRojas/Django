@@ -4,6 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>window.jQuery || document.write('<script src="../static/sistema/js/jquery-1.11.2.min.js"><\/script>')</script>
+    
+
 
     <title>
         {% block titulo %}
@@ -45,17 +48,17 @@
     <nav class="navbar navbar-expand-sm fixed-top topbar">
         <div class="container">
             <div class="searchbar">
-                <a href="#" class="navbar-brand">
+                <a href="{% url 'inicio' %}" class="navbar-brand">
                     <img src="../static/img/buscar4.jpg" alt="" style="height: 50px;">
                 </a>
                 <form action="{% url 'buscar' %}" method="" class="form-inline" id="formulario">
-                    <input type="text" placeholder="Buscar" class="form-control mr-sm-2" id="producto" name="producto"> 
+                    <input type="text" placeholder="Buscar" class="form-control mr-sm-2" id="producto" name="producto" value="{{buscar}}"> 
                     <button class="btn btn-success btn-sm" type="submit" >Buscar</button>    
                 </form>
             </div>
             <div class="sesionbar">
                 {% if request.user.username %}
-                    <a href="#" class="usuario">
+                    <a href="{% url 'usuariomtto' %}" class="usuario">
                         <span class="badge badge-warning">Ver Perfil: {{request.user.username}}</span>
                     </a>
                     <a href="{% url 'pedidoproceso' %}" class="carrito">

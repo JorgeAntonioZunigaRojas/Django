@@ -1,0 +1,100 @@
+{% extends 'basesis.html' %}
+{% block titulo %}
+    AQuiEsta - Usuario
+{% endblock titulo %}
+
+{% block extracss %}
+    <style>
+        .titulo-mtto{
+            display: inline-block;
+        }
+        .btn-editar{
+            margin-top: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            float:right;
+        }
+        .contenedor_imagen{
+            padding: 10px;
+            background: #EEEEEE;
+        }
+        .contenedor_imagen{
+            height: 300px;
+            text-align: center;
+        }
+        .imagen_empresa img{
+            height: 100%;
+        }
+    </style>
+{% endblock extracss %}
+
+{% block body %}
+        <div class="container-fluid">
+            <div class="">
+                <h2 class="text-left all-tittles titulo-mtto">Datos de Empresa</h2>
+                <button type="button" class="btn btn-success btn-sm btn-editar" onclick="abrir_modal_editar('{% url 'sisempresaeditar' empresa.id_empresa %}')" >Editar Datos</button>
+            </div>
+            <div class="data_usuario">
+                <form method="" action="">
+                    <fieldset disabled>
+                        {% csrf_token %}
+                        <div class="form-row">
+                            <div class="col-md-3 mb-3">
+                                <label for="ruc">RUC:</label>
+                                {{form.ruc}}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-12 mb-3">
+                                <label for="rznsocial">Razon Social:</label>
+                                {{form.rznsocial}}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-8 mb-3">
+                                <label for="ruc">Dirección:</label>
+                                {{form.direccion}}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="ubigeo">Distrito:</label>
+                                {{form.ubigeo}}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-12 mb-3">
+                                <label for="ruc">Telefono:</label>
+                                {{form.telefono}}
+                            </div>
+                        </div>
+                        <div class="form-row imagen_empresa">
+                            <div class="col-md-3 mb-3">
+                                <label for="ruc">Fontis local:</label>
+                                <div class="contenedor_imagen">
+                                    <img src="../media/{{empresa.imagen}}" alt="{{empresa.imagen}}">
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="ruc" >Logotipo:</label>
+                                <div class="contenedor_imagen">
+                                    <img src="../media/{{empresa.logo}}" alt="{{empresa.logo}}">
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modal_editar" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true"></div>
+        
+{% endblock body %}
+
+{% block extrajs %}
+    <script>
+        var $ = jQuery.noConflict();
+        function abrir_modal_editar(url){
+            $('#modal_editar').load(url,function(){
+                $(this).modal('show');
+            });
+        }
+    </script>
+{% endblock extrajs %}

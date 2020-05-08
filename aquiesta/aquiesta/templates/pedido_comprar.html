@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+{% block titulo %}
+    AQuiEsta
+{% endblock titulo %}
+
+{% block extracss %}
+    <style>
+        .titulo-mtto{
+            display: inline-block;
+        }
+        .btn-editar{
+            margin-top: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            float:right;
+        }
+        .imagenusuario{
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+        }
+        .order_header{
+            border-top: 1px solid #DDDDDD;
+            border-bottom: 1px solid #DDDDDD;
+            padding: 20px;
+            font-size: 12px;
+        }
+        .pedido_contenedor{
+            margin: auto;
+            margin-top: 20px;
+        }
+        .pedido_total{
+            text-align: right;
+        }
+        .order_body{
+            margin-top: 5px;
+            padding: 20px;
+            border: 1px solid #DDDDDD;
+        }
+        .order_body_container{
+            padding: 5px;
+            margin: auto;
+        }
+        .candado{
+            height: 20px;
+        }
+        .norton{
+            height: 20px;
+        }
+        .contenedor_norton{
+            text-align: right;
+        }
+        .tarjeta_data{
+            background: #FAFAFA;
+            border: 1px solid #EBEBEB;
+            padding-top: 10px;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .comentario{
+            font-size: 12px;
+            color: grey;
+        }
+        label{
+            margin-bottom: 0;
+        }
+    </style>
+{% endblock extracss %}
+
+{% block body %}
+
+    <div class="fondoBody">
+        <div class="container" style="padding-top: 70px;">
+            <div class="container" style="padding-top: 20px;">
+                <div class="form-row">
+                    <div class="col-6 pedido_contenedor">
+                        <div class="form-row order_header">
+                            <div class="col-6">
+                                Total a pagar: 
+                            </div>
+                            <div class="col-6 pedido_total">
+                                S/ 13.60
+                            </div>
+                        </div>
+                        <div class="form-row order_body">
+                            <div class="col-11 order_body_container">
+                                <div class="row">
+                                    <div class="col-1">
+                                        <img src="../media/static/candado.jpg" alt="" class="candado">
+                                    </div>
+                                    <div class="col-8">
+                                        <p>Operación 100% segura</p>
+                                    </div>
+                                    <div class="col-3 contenedor_norton">
+                                        <img src="../media/static/Norton.jpg" alt="" class="norton">
+                                    </div>
+                                </div>
+                                <div class="row tarjeta_data">
+                                    <div class="row col-12 pr-0">
+                                        <div class="col-6 pr-1">
+                                            <label for="">Número de tarjeta</label>
+                                            <input type="text" class="form-control" placeholder="xxxx xxxx xxxx xxxx">
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="row">
+                                                <label for="">Fecha de expiración</label>
+                                                <div class="col-7 pr-0 pl-0">
+                                                    <select name="mes" id="mes" class="form-control">
+                                                        <option value="01">Enero</option>
+                                                        <option value="02">Febrero</option>
+                                                        <option value="03">Marzo</option>
+                                                        <option value="04">Abril</option>
+                                                        <option value="05">Mayo</option>
+                                                        <option value="06">Junio</option>
+                                                        <option value="07">Julio</option>
+                                                        <option value="08">Agosto</option>
+                                                        <option value="09">Septiembre</option>
+                                                        <option value="10">Octubre</option>
+                                                        <option value="11">Noviembre</option>
+                                                        <option value="12">Diciembre</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-5 pl-1 pr-0">
+                                                    <select name="mes" id="mes" class="form-control">
+                                                        <option value="2020">2020</option>
+                                                        <option value="2021">2021</option>
+                                                        <option value="2022">2022</option>
+                                                        <option value="2023">2023</option>
+                                                        <option value="2024">2024</option>
+                                                        <option value="2025">2025</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row col-12 pr-0">
+                                        <div class="col-6 pr-1">
+                                            <label for="">Titular de la tarjeta</label>
+                                            <input type="text" class="form-control" placeholder="Ej. Antonio Rojas">
+                                            <span class="comentario">Tal como está impreso en la tarjeta</span>
+                                        </div>
+                                        <div class="col-6 pr-0 pl-0">
+                                            <label for="">Código de seguridad</label>
+                                            <input type="text" class="form-control" placeholder="000">
+                                        </div>
+                                    </div>
+
+                                    
+                                </div>
+
+                                <div class="row emisor_data">
+                                    <div class="row col-12 pr-0">
+                                        <div class="col-6 pr-1">
+                                            <label for="">Tipo de documento</label>
+                                            <select name="tipo_documento" id="tipo_documento" class="form-control">
+                                                <option value="01">DNI</option>
+                                                <option value="04">Carnet de extranjeria</option>
+                                                <option value="06">RUC</option>
+                                                <option value="07">Pasaporte</option>
+                                                <option value="11">Part. Nacimiento</option>
+                                                <option value="00">Otros</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-6 pr-0 pl-0">
+                                            <label for="">Numero de documento</label>
+                                            <input type="text" class="form-control" placeholder="xxxxxxxx">
+                                        </div>
+                                    </div>
+
+                                    <div class="row col-12 pr-0">
+                                        <div class="col-6 pr-1">
+                                            <label for="">Telefono de contacto</label>
+                                            <input type="text" class="form-control" placeholder="Ej. Antonio Rojas">
+                                            <span class="comentario">Para contactarte si hay algun problema</span>
+                                        </div>
+                                        <div class="col-6 pr-0 pl-0">
+                                            <label for="">Email</label>
+                                            <input type="email" class="form-control" placeholder="Email">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row col-12 pr-0">
+                                        <div class="col-6"></div>
+                                        <div class="col-6 pr-0">
+                                            <a href="#" class="btn btn-sm btn-danger w-100">Pagar</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock body %}

@@ -29,6 +29,14 @@ urlpatterns = [
     
     path('sisusuariomtto/', views.sis_usuario_mtto, name='sisusuariomtto'),
     path('sisusuarioeditar/<int:id>', views.sis_usuario_editar,name='sisusuarioeditar'),
+
+    path('sisempresamtto/', views.sis_empresa_mtto, name='sisempresamtto'),
+    path('sisempresaeditar/<int:id>', views.sis_empresa_editar,name='sisempresaeditar'),
+
+    path('usuariomtto/', views.usuario_mtto,name='usuariomtto'),
+    path('usuarioeditar/<int:id>', views.usuario_editar,name='usuarioeditar'),
+    
+    path('pedidocomprar/<int:id>', views.pedido_comprar,name='pedidocomprar'),
 ]
 if DEBUG:
     urlpatterns += static(STATIC_URL, document_root = STATIC_ROOT)

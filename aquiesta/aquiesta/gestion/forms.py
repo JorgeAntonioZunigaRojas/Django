@@ -112,3 +112,40 @@ class UsuarioForm(forms.ModelForm):
 
         }
     
+class EmpresaForm(forms.ModelForm):
+    class Meta:
+        model = Empresa
+        fields = ['ruc', 'rznsocial', 'direccion', 'telefono', 'ubigeo', 'imagen', 'logo']
+        widgets = {
+            'ruc': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'id': 'ruc',
+                }
+            ),
+            'rznsocial': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'id': 'rznsocial',
+                }
+            ),
+            'direccion': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'id': 'direccion',
+                }
+            ),
+            'ubigeo': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'id': 'ubigeo',
+                }
+            ),
+            'telefono': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'id': 'telefono',
+                }
+            ),
+        }
+

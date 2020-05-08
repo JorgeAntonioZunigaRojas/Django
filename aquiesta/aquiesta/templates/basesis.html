@@ -55,7 +55,7 @@
             </div>
             <div class="full-reset" style="background-color:#2B3D51; padding: 10px 0; color:#fff;">
                 <figure>
-                    <img src="{% static empresa.logo %}" alt="Logo" class="img-responsive center-box" style="width:55%;">
+                    <img src="../media/{{empresa.logo}}" alt="Logo" class="img-responsive center-box" style="width:55%;">
                 </figure>
                 <p class="text-center" style="padding-top: 15px;">{{empresa.rznsocial}}</p>
             </div>
@@ -89,7 +89,7 @@
                             <li><a href="#"><i class="zmdi zmdi-assignment-account zmdi-hc-fw"></i>&nbsp;&nbsp; Reporte 06 </a></li>
                         </ul>
                     </li>
-                    <li><a href="#"><i class="zmdi zmdi-wrench zmdi-hc-fw"></i>&nbsp;&nbsp; Configuraciones avanzadas</a></li>
+                    <li><a href="{% url 'sisempresamtto' %}"><i class="zmdi zmdi-wrench zmdi-hc-fw"></i>&nbsp;&nbsp; Configuraciones avanzadas</a></li>
                 </ul>
             </div>
         </div>

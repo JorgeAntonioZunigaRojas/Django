@@ -11,18 +11,51 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.core.paginator import Paginator
 
-from gestion.forms import CrearUsuarioForm, CategoriaForm, ProductoForm, UsuarioForm
+from gestion.forms import CrearUsuarioForm, CategoriaForm, ProductoForm, UsuarioForm, EmpresaForm
 from gestion.models import Moneda, Ubigeo
 from gestion.models import Producto, Empresa, Productodetalle, Usuario, Pedido, Pedidodetalle, Categoria
 from django.db.models import Q
+
+
+@login_required(login_url='iniciarsesionempresa')
+def sis_empresa_editar(request, id):
+    mensaje = ''
+    error =[]
+    empresa_form = []
+    try:
+        empresa = Empresa.objects.get(id_empresa=id)
+        if request.method=='GET':
+            empresa_form = EmpresaForm(instance=empresa)
+        else:
+            empresa_form = EmpresaForm(request.POST, request.FILES, instance=empresa)
+            if empresa_form.is_valid():
+                empresa_form.save()
+                return redirect('sisempresamtto')
+            else:
+                mensaje = 'Datos NO validos'
+    except ObjectDoesNotExist as e:
+        error = e
+    contexto = {
+        'form': empresa_form,
+        'empresa': empresa,
+        'error': error,
+        'mensaje': mensaje,
+    }
+    return render(request, 'sis_empresa_editar.html', contexto)
+
+@login_required(login_url='iniciarsesionempresa')
+def sis_empresa_mtto(request):
+    contexto = get_contexto(request)
+    empresa = Empresa.objects.get(usuario__id_usuario=request.user.id)
+    contexto['form']= EmpresaForm(instance=empresa)
+    contexto['empresa']= empresa
+    return render(request,'sis_empresa_mtto.html', contexto)
 
 @login_required(login_url='iniciarsesionempresa')
 def sis_usuario_editar(request, id):
     error = []
     usuario_form = []
     mensaje = ''
-    #sql_query = "select id_ubigeo, nombre from ubigeo where left(id_ubigeo,4)='1401' and id_ubigeo<>'140100' order by nombre"
-    #distritos = Ubigeo.objects.raw(sql_query)
     distritos = Ubigeo.objects.filter(id_ubigeo__contains='1401').exclude(id_ubigeo='140100')
 
     try:
@@ -48,6 +81,8 @@ def sis_usuario_mtto(request):
     contexto['form']= UsuarioForm(instance=usuario)
     contexto['usuario']= usuario
     return render(request,'sis_usuario_mtto.html', contexto)
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
 @login_required(login_url='iniciarsesionempresa')
 def sis_producto_editar(request, id):
@@ -233,12 +268,24 @@ def confirmarcompra(request, id):
     return redirect('pedidoproceso')
 
 @login_required(login_url='iniciarsesion')
+def pedido_comprar(request, id):
+    context = {}
+    id_user = request.user.id
+    context['Qitems'] = get_Qitems(id_user)
+    return render(request, 'pedido_comprar.html', context)
+
+@login_required(login_url='iniciarsesion')
 def pedidoproceso(request):
     id_user = request.user.id
     contexto = {}
+    pedidodetalle = Pedidodetalle.objects.filter(pedido__id_usuario=id_user, pedido__st_pedido='PROCESO')
     contexto['pedidos'] = Pedido.objects.filter(id_usuario=id_user, st_pedido='PROCESO')
-    contexto['pedidodetalles'] = Pedidodetalle.objects.filter(pedido__id_usuario=id_user, pedido__st_pedido='PROCESO')
+    contexto['pedidodetalles'] = pedidodetalle
     contexto['Qitems'] = get_Qitems(id_user)
+    total_pedido = 0
+    for item in pedidodetalle:
+        total_pedido = total_pedido + (item.cantidad * item.precio)
+    contexto['total_pedido'] = total_pedido
     return render(request, 'pedidoproceso.html', contexto)
 
 def get_Qitems(id_usuario):
@@ -257,11 +304,14 @@ def agregarproducto(request, id):
         usuario = Usuario.objects.create(id_usuario=id_user, nombre=username)
     if not pedido:
         pedido = Pedido.objects.create(empresa=producto.categoria.empresa, id_usuario=id_user, st_pedido='PROCESO')
-    pedidoitem = Pedidodetalle.objects.filter(pedido__id_pedido=pedido[0].id_pedido, producto=id)
+    else:
+        pedido = pedido[0]
+
+    pedidoitem = Pedidodetalle.objects.filter(pedido__id_pedido=pedido.id_pedido, producto=id)
 
     if not pedidoitem:
         pedidoitem = Pedidodetalle.objects.create(
-            pedido = pedido[0], 
+            pedido = pedido, 
             producto = producto, 
             coproducto = producto.codigo, 
             descripcion = producto.nombre, 
@@ -283,7 +333,7 @@ def registarusuario(request):
                 form.save()
                 user = form.cleaned_data.get('username')
                 idusuario = form.cleaned_data.get('id')
-                messages.success(request,'Usuario [' + str(idusuario) +'-'+ user + '] su cuenta ha sido creada')
+                messages.success(request,'Usuario [' + user + '] su cuenta ha sido creada')
                 return redirect('iniciarsesion')
         context = {'form':form}
         return render(request, 'registrarusuario.html', context)
@@ -321,16 +371,58 @@ def get_producto(request, id):
         error = e
     return render(request, 'producto.html', { 'producto':producto, 'error': error, 'empresa':empresa, 'productodetalle': productodetalle, 'Qitems': Qitems})
 
+
+@login_required(login_url='iniciarsesionempresa')
+def usuario_editar(request, id):
+    error = []
+    usuario_form = []
+    mensaje = ''
+
+    try:
+        usuario = Usuario.objects.get(id_usuario=id)
+        if request.method == 'GET':
+            usuario_form = UsuarioForm(instance=usuario)
+        else:
+            usuario_form = UsuarioForm(request.POST, request.FILES, instance=usuario)
+            if usuario_form.is_valid():
+                usuario_form.save()
+                return redirect('usuariomtto')
+            else:
+                mensaje = 'Datos incompletos...!!!'
+
+    except ObjectDoesNotExist as e:
+        error = e
+
+    contexto={}
+    contexto['form'] = usuario_form
+    contexto['id_usuario'] = id
+    contexto['error'] = error
+    contexto['mensaje'] = mensaje
+    contexto['usuario'] = usuario
+    contexto['Qitems'] = get_Qitems(request.user.id)
+
+    return render(request, 'usuario_editar.html', contexto)
+
+@login_required(login_url='iniciarsesion')
+def usuario_mtto(request):
+    contexto={}
+    usuario = Usuario.objects.get(id_usuario=request.user.id)
+    contexto['Qitems'] = get_Qitems(request.user.id)
+    contexto['form']= UsuarioForm(instance=usuario)
+    contexto['usuario']= usuario
+    return render(request,'usuario_mtto.html', contexto)
+
 class buscarProducto(ListView):
     model = Producto
     template_name = 'principal.html'
     def get_queryset(self, ):
-        p_buscar = self.request.GET['producto']
+        p_buscar = self.request.GET.get('producto')
         return self.model.objects.filter(nombre__icontains=p_buscar)
     def get_context_data(self, request, **kwargs):
         contexto = {}
         contexto['productos'] = self.get_queryset()
         contexto['Qitems'] = get_Qitems(request.user.id)
+        contexto['buscar'] = self.request.GET.get('producto')
         return contexto
     def get(self, request,*args,**kwargs):
         return render(request, self.template_name,self.get_context_data(request))
@@ -339,7 +431,7 @@ class inicio(ListView):
     model = Producto
     template_name = 'principal.html'
     def get_queryset(self, ):
-        return self.model.objects.all().order_by('-fecha_creacion', '-nombre')[:12]
+        return self.model.objects.all().order_by('-fecha_creacion', 'nombre')[:12]
     def get_context_data(self, request, **kwargs):
         contexto = {}
         contexto['productos'] = self.get_queryset()

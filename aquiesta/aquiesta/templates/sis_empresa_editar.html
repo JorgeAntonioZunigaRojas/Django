@@ -11,58 +11,75 @@
     .etiqueta{
         font-weight: normal;
     }
+    .labelimagen{
+        font-weight: bold;
+    }
 </style>
 
 <div class="modal-dialog" role="document">
     <div class="modal-content">
+
         <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">EDITAR Usuario</h5>
+            <h5 class="modal-title" id="exampleModalLabel">EDITAR Empresa</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <form method="POST" action="{% url 'sisusuarioeditar' id_usuario %}"  enctype="multipart/form-data" >
+        <form method="POST" action="{% url 'sisempresaeditar' empresa.id_empresa %}"  enctype="multipart/form-data" >
             {% csrf_token %}
             <div class="modal-body">
                 <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="tipo_doc_ident" class="etiqueta">Tipo de documento identidad:</label>
-                        {{ form.tipo_doc_ident }}
+                    <div class="form-group col-md-2">
+                        <label for="ruc" class="etiqueta">RUC:</label>
                     </div>
-                    <div class="form-group col-md-6">
-                        <label for="num_doc_ident" class="etiqueta">Numero documento identidad:</label>
-                        {{ form.num_doc_ident }}
+                    <div class="form-group col-md-10">
+                        {{ form.ruc }}
                     </div>
+                    
                 </div>
                 <div class="form-row">
-                    <div class="form-group col-md-12">
-                        <label for="nombre" class="etiqueta" >Nombre:</label>
-                        {{ form.nombre }}
+                    <div class="form-group col-md-2">
+                        <label for="rznsocial" class="etiqueta" >Nombre:</label>
+                    </div>
+                    <div class="form-group col-md-10">
+                        {{ form.rznsocial }}
                     </div>
                 </div>
+
                 <div class="form-row">
-                    <div class="form-group col-md-12">
+                    <div class="form-group col-md-2">
                         <label for="direccion" class="etiqueta" >Dirección:</label>
+                    </div>
+                    <div class="form-group col-md-6">
                         {{ form.direccion }}
                     </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="ubigeo" class="etiqueta" >Distrito:</label>
+                    <div class="form-group col-md-4">
                         {{ form.ubigeo }}
                     </div>
-                    <div class="form-group col-md-6">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-2">
                         <label for="telefono" class="etiqueta" >Telefonos:</label>
+                    </div>
+                    <div class="form-group col-md-10">
                         {{ form.telefono }}
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group col-md-12">
-                        <label for="Imagen" class="etiqueta" >Imagen:</label>
+                        <label for="imagen" class="etiqueta labelimagen" >Frontis Local:</label>
                         {{ form.imagen }}
                     </div>
                 </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="imagen" class="etiqueta labelimagen" >Logotipo:</label>
+                        {{ form.logo }}
+                    </div>
+                </div>
+
             </div>
 
             {% if mensaje %}

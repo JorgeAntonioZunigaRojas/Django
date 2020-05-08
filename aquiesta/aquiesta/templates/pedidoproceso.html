@@ -12,6 +12,22 @@
             text-align: center;
             padding-top: 50px;
         }
+        .total_pedido{
+            font-weight: bold;
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        .monto_total{
+            text-align: right;
+            color: #DC3545;
+        }
+        .pedido_comprar{
+            background: #E1E1E1;
+            padding: 10px;
+        }
+        .imagen_producto{
+            height: 50px;
+        }
     </style>
 {% endblock extracss %}
 
@@ -39,7 +55,9 @@
                                 {% for item in pedidodetalles %}
                                     {% if item.pedido.id_pedido is pedido.id_pedido %}
                                         <tr>
-                                            <td>{{item.coproducto}}</td>
+                                            <td>
+                                                <img src="../media/{{item.producto.imagen}}" alt="" class="imagen_producto">
+                                            </td>
                                             <td>{{item.descripcion}}</td>
                                             <td>
                                                 <input type="number" value="{{item.cantidad}}">
@@ -55,7 +73,24 @@
                             </tbody>
                         </table>
                         <div class="confirmar">
-                            <a href="{% url 'confirmarcompra' pedido.id_pedido %}" class="btn btn-sm btn-success w-100">Confirmar compra</a>
+                            <div class="row pedido_comprar">
+                                <div class="col-9">
+                                </div>
+                                <div class="col-3">
+                                    <div class="row total_pedido">
+                                        <div class="col-3">
+                                            Total: 
+                                        </div>
+                                        <div class="col-9 monto_total">
+                                            S/ {{total_pedido}}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <a href="{% url 'pedidocomprar' pedido.id_pedido %}" class="btn btn-sm btn-success w-100">Comprar</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
                         </div>
                     </div>
                     <hr>

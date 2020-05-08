@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block titulo %}
+    AQuiEsta
+{% endblock titulo %}
+
+{% block extracss %}
+    <style>
+        .titulo-mtto{
+            display: inline-block;
+        }
+        .btn-editar{
+            margin-top: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            float:right;
+        }
+        .imagenusuario{
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+        }
+    </style>
+{% endblock extracss %}
+
+{% block body %}
+
+    <div class="fondoBody">
+        <div class="container" style="padding-top: 70px;">
+            <div class="container" style="padding-top: 20px;">
+                <div class="form-row">
+                    <div class="col-md-6 mb-3">
+                        <h5>DATOS DE USUARIO</h5>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <a href="{% url 'usuarioeditar' usuario.id_usuario %}" class="btn btn-success btn-sm btn-editar mt-0">Editar Datos</a>
+                    </div>
+                </div>
+
+                <div class="container-fluid">
+                    <div class="data_usuario">
+                        <form method="" action="">
+                            <fieldset disabled>
+                                {% csrf_token %}
+                                <div class="form-row">
+                                    <div class="col-md-6 mb-3">
+                                    <label for="tipo_doc_ident">Tipo de documento de identidad:</label>
+                                        {{form.tipo_doc_ident}}
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="num_doc_ident">Numero de documento de identidad:</label>
+                                        {{form.num_doc_ident}}
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-12 mb-3">
+                                        <label for="nombre">Nombre y Apellidos:</label>
+                                        {{form.nombre}}
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="direccion">Dirección:</label>
+                                        {{form.direccion}}
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="ubigeo">Ubigeo:</label>
+                                        <input type="text" class="form-control" value="{{usuario.ubigeo}}">
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="col-md-12 mb-3">
+                                        <label for="telefono">Telefonos:</label>
+                                        {{form.telefono}}
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="col-md-12 mb-3">
+                                        <label for="">Imagen:</label>
+                                        <img src="../media/{{usuario.imagen}}" alt="{{usuario.imagen}}" class="imagenusuario">
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock body %}

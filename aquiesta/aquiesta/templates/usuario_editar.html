@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block titulo %}
+    AQuiEsta
+{% endblock titulo %}
+
+{% block extracss %}
+    <style>
+        .titulo-mtto{
+            display: inline-block;
+        }
+        .btn-guardar,
+        .btn-cancelar{
+            margin-top: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            float:right;
+            margin-left: 10px;
+        }
+    </style>
+{% endblock extracss %}
+
+{% block body %}
+
+    <div class="fondoBody">
+        <div class="container" style="padding-top: 70px;">
+            <div class="container" style="padding-top: 20px;">
+                <div class="form-row">
+                    <div class="col-md-6 mb-3">
+                        <h5>EDITAR Usuario</h5>
+                    </div>
+                </div>
+
+                <div class="container-fluid">
+                    <div class="data_usuario">
+                        <form method="POST" action="{% url 'usuarioeditar' usuario.id_usuario %}"  enctype="multipart/form-data" >
+                        {% csrf_token %}
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="tipo_doc_ident" class="etiqueta">Tipo de documento identidad:</label>
+                                {{ form.tipo_doc_ident }}
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="num_doc_ident" class="etiqueta">Numero documento identidad:</label>
+                                {{ form.num_doc_ident }}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="nombre" class="etiqueta" >Nombre:</label>
+                                {{ form.nombre }}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="direccion" class="etiqueta" >Dirección:</label>
+                                {{ form.direccion }}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="ubigeo" class="etiqueta" >Distrito:</label>
+                                {{ form.ubigeo }}
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="telefono" class="etiqueta" >Telefonos:</label>
+                                {{ form.telefono }}
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="Imagen" class="etiqueta" >Imagen:</label>
+                                {{ form.imagen }}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="form-row">
+                            <div class="col-md-12 mb-3">
+                                <a href="{% url 'usuariomtto' %}" class="btn btn-secondary btn-sm btn-cancelar mt-0">Cancelar</a> 
+                                
+                                <button type="submit" class="btn btn-success btn-sm btn-guardar mt-0">Guardar</button>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock body %}

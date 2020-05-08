@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
 # Create your models here.
 
 class Ubigeo(models.Model):
@@ -11,8 +12,22 @@ class Ubigeo(models.Model):
         return self.nombre
 
 class Usuario(models.Model):
+    dni = '01'
+    carnet = '04'
+    ruc = '06'
+    pasaporte = '07'
+    partida = '11'
+    otros = '00'
+    tipo_documento_identidad = [
+        (dni,'DNI'),
+        (carnet,'CARNET DE EXTRANJERIA'),
+        (ruc,'RUC'),
+        (pasaporte,'PASAPORTE'),
+        (partida,'PART. DE NACIMIENTO-IDENTIDAD'),
+        (otros,'OTROS'),
+    ]
     id_usuario = models.IntegerField(primary_key=True)
-    tipo_doc_ident = models.CharField(max_length=1, blank=True, null=True)
+    tipo_doc_ident = models.CharField(max_length=2, choices=tipo_documento_identidad, default=otros)
     num_doc_ident = models.CharField(max_length=15, blank=True, null=True)
     nombre = models.CharField(max_length=200, blank=True, null=True)
     direccion = models.CharField(max_length=200, blank=True, null=True)
@@ -37,8 +52,8 @@ class Empresa(models.Model):
     telefono = models.CharField(max_length=200, blank=True, null=True)
     detalle = models.CharField(max_length=200, blank=True, null=True)
     ubigeo = models.ForeignKey('Ubigeo', models.DO_NOTHING, db_column='id_ubigeo', blank=True, null=True)
-    imagen = models.CharField(max_length=200, blank=True, null=True)
-    logo = models.CharField(max_length=200, blank=True, null=True)
+    imagen = models.ImageField(upload_to = 'empresa', default='static/imagen_no_disponible.png')
+    logo = models.ImageField(upload_to = 'empresa', default='static/imagen_no_disponible.png')
     st_sgestion = models.CharField(max_length=200, default='EMITIDA')
     fecha_creacion=models.DateTimeField('Fecha de creación', auto_now=False, auto_now_add=True)
     fecha_edicion=models.DateTimeField('Fecha de edición', auto_now=True, auto_now_add=False)

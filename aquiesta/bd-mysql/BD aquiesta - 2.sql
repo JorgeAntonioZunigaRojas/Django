@@ -1,43 +1,32 @@
 #drop schema aquiesta;
 #create schema aquiesta;
-#use aquiesta;
+#use aquiestav3;
 
 insert into ubigeo
-select*from aquiestav2.ubigeo;
+select*from aquiesta.ubigeo;
 
 insert into moneda
-select*from aquiestav2.moneda;
+select*from aquiesta.moneda;
 
 insert into usuario(id_usuario, tipo_doc_ident, num_doc_ident, nombre, direccion, telefono, imagen, id_ubigeo)
-select	id_usuario, tipo_doc_ident, num_doc_ident, nombre, direccion, telefono, imagen, id_ubigeo
-from	aquiestav2.usuario where id_usuario in (1,2);
+select	id_usuario, '00', num_doc_ident, nombre, direccion, telefono, imagen, id_ubigeo
+from	aquiesta.usuario where id_usuario in (1,2);
 
 insert into empresa(ruc, rznsocial, direccion, telefono, detalle, imagen, logo, st_sgestion, id_ubigeo, id_usuario)
 select ruc, rznsocial, direccion, telefono, detalle, imagen, logo, st_sgestion, id_ubigeo, id_usuario
-from aquiestav2.empresa;
+from aquiesta.empresa;
 
 insert into categoria(id_empresa, nombre)
-select id_empresa, nombre from aquiestav2.categoria;
+select id_empresa, nombre from aquiesta.categoria;
 
 insert into producto(codigo, nombre, precio, imagen, id_categoria, id_moneda)
-select codigo, nombre, precio, imagen, id_categoria, id_moneda from aquiestav2.producto;
+select codigo, nombre, precio, imagen, id_categoria, id_moneda from aquiesta.producto;
 
 
 select*from usuario;
 select*from empresa;
 select*from producto
 order by id_producto desc;
-
-update	producto
-set		imagen='static/imagen_no_disponible.png'
-where	id_producto not in (135, 134)
-
-
-select*from categoria
-where id_empresa=2
-order by fecha_edicion desc
-
-id_categoria, nombre, id_empresa
 
 'imagen': forms.TextInput(
                 attrs={

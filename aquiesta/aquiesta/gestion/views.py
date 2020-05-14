@@ -15,7 +15,64 @@ from gestion.forms import CrearUsuarioForm, CategoriaForm, ProductoForm, Usuario
 from gestion.models import Moneda, Ubigeo
 from gestion.models import Producto, Empresa, Productodetalle, Usuario, Pedido, Pedidodetalle, Categoria
 from django.db.models import Q
+from datetime import datetime
+from decimal import Decimal
 
+@login_required(login_url='iniciarsesionempresa')
+def sis_pedido_mtto(request, id_pedido):
+    contexto = get_contexto(request)
+    contexto['pedido'] = Pedido.objects.get(id_pedido=id_pedido)
+    contexto['detalle'] = Pedidodetalle.objects.filter(pedido__id_pedido=id_pedido)
+    return render(request, 'sis_pedido_mtto.html', contexto)
+
+@login_required(login_url='iniciarsesionempresa')
+def sis_pedido_todos(request):
+    pedidos = Pedido.objects.all().exclude(st_pedido='PROCESO')
+    consulta = request.GET.get('buscar')
+    if consulta:
+        pedidos = pedidos.filter(Q(nombre__icontains = consulta) | Q(num_doc_iden__icontains = consulta) | Q(id_pedido__icontains = consulta))
+    contexto = get_contexto(request)
+    contexto['pedidos'] = pedidos
+    return render(request, 'sis_pedido_todos.html', contexto)
+
+@login_required(login_url='iniciarsesionempresa')
+def sis_pedido_pendiente_entregar(request, id_pedido):
+    pedido = Pedido.objects.get(id_pedido=id_pedido)
+    contexto = get_contexto(request)
+    contexto['pedido'] = pedido
+    if request.method=='POST':
+        pedido.st_pedido='ENTREGADO'
+        pedido.save()
+        return redirect('sispedidopendienteentregalista')
+    return render(request, 'pedido_confirm_entrega.html', contexto)
+    
+@login_required(login_url='iniciarsesionempresa')
+def sis_pedido_pendiente_anular(request, id_pedido):
+    pedido = Pedido.objects.get(id_pedido=id_pedido)
+    contexto = get_contexto(request)
+    contexto['pedido'] = pedido
+    if request.method=='POST':
+        pedido.st_pedido='ANULADO'
+        pedido.save()
+        return redirect('sispedidopendienteentregalista')
+    return render(request, 'pedido_confirm_delete.html', contexto)
+    
+@login_required(login_url='iniciarsesionempresa')
+def sis_pedido_pendiente_entrega_mtto(request, id_pedido):
+    contexto = get_contexto(request)
+    contexto['pedido'] = Pedido.objects.get(id_pedido=id_pedido)
+    contexto['detalle'] = Pedidodetalle.objects.filter(pedido__id_pedido=id_pedido)
+    return render(request, 'sis_pedido_pendiente_entrega_mtto.html', contexto)
+
+@login_required(login_url='iniciarsesionempresa')
+def sis_pedido_pendiente_entrega_lista(request):
+    pedidos = Pedido.objects.filter(st_pedido='COMPRADO')
+    consulta = request.GET.get('buscar')
+    if consulta:
+        pedidos = pedidos.filter(Q(nombre__icontains = consulta) | Q(num_doc_iden__icontains = consulta) | Q(id_pedido__icontains = consulta))
+    contexto = get_contexto(request)
+    contexto['pedidos'] = pedidos
+    return render(request, 'sis_pedido_pendiente_entrega_lista.html', contexto)
 
 @login_required(login_url='iniciarsesionempresa')
 def sis_empresa_editar(request, id):
@@ -210,10 +267,12 @@ def get_contexto(request):
     id_user = request.user.id
     empresa = Empresa.objects.get(usuario__id_usuario=id_user)
     usuario = Usuario.objects.get(id_usuario=id_user)
+    QPxDespachar = Pedido.objects.filter(empresa__id_empresa=empresa.id_empresa, st_pedido='COMPRADO').count()
     id_empresa = empresa.id_empresa
     contexto['empresa'] = empresa
     contexto['usuario'] = usuario
     contexto['id_empresa'] = id_empresa
+    contexto['QPxDespachar'] = QPxDespachar
     return contexto
 
 @login_required(login_url='iniciarsesionempresa')
@@ -222,12 +281,10 @@ def sisInicio(request):
     id_user = request.user.id
     empresa = contexto['empresa']
     id_empresa = empresa.id_empresa
-    QPxDespachar = Pedido.objects.filter(empresa__id_empresa=id_empresa, st_pedido='COMPRADO').count()
     QPEntregados = Pedido.objects.filter(empresa__id_empresa=id_empresa, st_pedido='ENTREGADO').count()
     QPEmitidos = Pedido.objects.filter(empresa__id_empresa=id_empresa).exclude(st_pedido='PROCESO').count()
     QCategorias = Categoria.objects.filter(empresa__id_empresa=id_empresa).count()
     QProductos = Producto.objects.filter(categoria__empresa__id_empresa=id_empresa).count()
-    contexto['QPxDespachar'] = QPxDespachar
     contexto['QPEntregados'] = QPEntregados
     contexto['QPEmitidos'] = QPEmitidos
     contexto['QCategorias'] = QCategorias
@@ -261,17 +318,25 @@ def iniciarsesionempresa(request):
         return render(request, 'iniciarsesionempresa.html', context)
 
 @login_required(login_url='iniciarsesion')
-def confirmarcompra(request, id):
+def pedido_pagar(request, id):
     pedido = Pedido.objects.get(id_pedido=id)
     pedido.st_pedido='COMPRADO'
+    pedido.nombre = request.POST.get('nombre')
+    pedido.tipo_doc_iden = request.POST.get('tipo_doc_ident')
+    pedido.num_doc_iden = request.POST.get('num_doc_ident')
+    pedido.telefono = request.POST.get('telefono')
+    pedido.fec_emision = datetime.now()
+    print(request.POST.get('tipo_doc_ident'))
+
     pedido.save()
-    return redirect('pedidoproceso')
+    return pedido_comprar(request, id)
 
 @login_required(login_url='iniciarsesion')
 def pedido_comprar(request, id):
     context = {}
-    id_user = request.user.id
-    context['Qitems'] = get_Qitems(id_user)
+    context['Qitems'] = get_Qitems(request.user.id)
+    context['form_usuario'] = UsuarioForm(instance=Usuario.objects.get(id_usuario=request.user.id))
+    context['pedido'] = Pedido.objects.get(id_pedido=id)
     return render(request, 'pedido_comprar.html', context)
 
 @login_required(login_url='iniciarsesion')
@@ -282,15 +347,12 @@ def pedidoproceso(request):
     contexto['pedidos'] = Pedido.objects.filter(id_usuario=id_user, st_pedido='PROCESO')
     contexto['pedidodetalles'] = pedidodetalle
     contexto['Qitems'] = get_Qitems(id_user)
-    total_pedido = 0
-    for item in pedidodetalle:
-        total_pedido = total_pedido + (item.cantidad * item.precio)
-    contexto['total_pedido'] = total_pedido
     return render(request, 'pedidoproceso.html', contexto)
 
 def get_Qitems(id_usuario):
     QItems = Pedidodetalle.objects.filter(pedido__id_usuario=id_usuario, pedido__st_pedido='PROCESO').count()
     return QItems
+
 
 @login_required(login_url='iniciarsesion')
 def agregarproducto(request, id):
@@ -318,7 +380,13 @@ def agregarproducto(request, id):
             cantidad = 1, 
             precio = producto.precio,
         )
-
+        pedidodetalle = Pedidodetalle.objects.filter(pedido__id_pedido=pedido.id_pedido)
+        subtotal = Decimal(0.00)
+        for item in pedidodetalle:
+            subtotal = subtotal + Decimal(item.cantidad*item.precio)
+        pedido.subtotal = subtotal
+        pedido.costo_entrega=0
+        pedido.save()
     context = {}
     return get_producto(request, id)
 

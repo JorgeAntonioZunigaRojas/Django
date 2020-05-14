@@ -13,7 +13,6 @@ urlpatterns = [
     path('registarusuario/' , views.registarusuario, name = 'registarusuario'),
     path('agregarproducto/<int:id>' , views.agregarproducto, name = 'agregarproducto'),
     path('pedidoproceso/' , views.pedidoproceso, name = 'pedidoproceso'),
-    path('confirmarcompra/<int:id>' , views.confirmarcompra, name = 'confirmarcompra'),
     path('iniciarsesionempresa/', views.iniciarsesionempresa, name = 'iniciarsesionempresa'),
     path('siscerrarsesion/', views.sisCerrarSesion, name = 'siscerrarsesion'),
     path('sisinicio/', views.sisInicio, name = 'sisinicio'),
@@ -37,6 +36,14 @@ urlpatterns = [
     path('usuarioeditar/<int:id>', views.usuario_editar,name='usuarioeditar'),
     
     path('pedidocomprar/<int:id>', views.pedido_comprar,name='pedidocomprar'),
+    path('pedidopagar/<int:id>', views.pedido_pagar,name='pedidopagar'),
+
+    path('sispedidopendienteentregalista/', views.sis_pedido_pendiente_entrega_lista,name='sispedidopendienteentregalista'),
+    path('sispedidopendienteentregamtto/<int:id_pedido>', views.sis_pedido_pendiente_entrega_mtto,name='sispedidopendienteentregamtto'),
+    path('sispedidopendienteanular/<int:id_pedido>', views.sis_pedido_pendiente_anular,name='sispedidopendienteanular'),
+    path('sispedidopendienteentregar/<int:id_pedido>', views.sis_pedido_pendiente_entregar,name='sispedidopendienteentregar'),
+    path('sispedidotodos/', views.sis_pedido_todos,name='sispedidotodos'),
+    path('sispedidomtto/<int:id_pedido>', views.sis_pedido_mtto,name='sispedidomtto'),
 ]
 if DEBUG:
     urlpatterns += static(STATIC_URL, document_root = STATIC_ROOT)

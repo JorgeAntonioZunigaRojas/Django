@@ -1,0 +1,137 @@
+{% extends 'basesis.html' %}
+{% block titulo %}
+    AQuiEsta - Pedidos pendiente de entrega
+{% endblock titulo %}
+
+{% block extracss %}
+    <style>
+        .alinearizquierda{
+            text-align: left;
+        }
+        .alinearderecha{
+            text-align: right;
+        }
+        .btn-nuevo,
+        .btn-editar,
+        .btn-eliminar{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .btn-nuevo{
+            float: right;
+            margin-top: 25px;
+        }
+        .titulo-mtto{
+            display: inline-block;
+        }
+        .div-table{
+            margin-bottom: 0px;
+            margin-top: 5px;
+        }
+        .form-group-buscar{
+            margin-bottom: 0;
+        }
+        .input-buscar,
+        .btn-buscar-producto{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .imagen_producto{
+            height: 60px;
+        }
+        .container-fluid input{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .contenedor_pedido{
+            padding: 20px;
+        }
+        .row-total{
+            font-weight: bold;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #DFF0D8;
+        }
+        .row-button{
+            margin-top: 10px;
+            margin-bottom: 10px;
+            float: right;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+    </style>
+{% endblock extracss %}
+
+{% block body %}
+        <div class="container-fluid">
+            <div class="">
+                <h2 class="text-left all-tittles titulo-mtto">Datos del Pedido</h2>
+            </div>
+            <div class="contenedor_pedido">
+                <fieldset disabled="disabled">
+                    <div class="row">
+                        <div class="form-group col-md-3">
+                            <label for="id_pedido">Pedido N°</label>
+                            <input type="text" class="form-control" id="id_pedido" value="{{pedido.id_pedido}}">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="fec_emision">Fecha de emisión</label>
+                            <input type="text" class="form-control" id="fec_emision" value="{{pedido.fec_emision}}">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="fec_emision">Estado</label>
+                            <input type="text" class="form-control" id="fec_emision" value="{{pedido.st_pedido}}">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="nombre">Nombre</label>
+                            <input type="text" class="form-control" id="nombre" value="{{pedido.nombre}}">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="num_doc_iden">Doc. Identidad</label>
+                            <input type="text" class="form-control" id="num_doc_iden" value="{{pedido.num_doc_iden}}">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="telefono">Telefono</label>
+                            <input type="text" class="form-control" id="telefono" value="{{pedido.telefono}}">
+                        </div>
+                    </div>
+                </fieldset>
+                    
+                <div class="div-table">
+                    <div class="div-table-row div-table-head">
+                        <div class="div-table-cell alinearizquierda">Producto</div>
+                        <div class="div-table-cell alinearizquierda">Descripcion</div>
+                        <div class="div-table-cell alinearizquierda">Codigo</div>
+                        <div class="div-table-cell alinearderecha">Cantidad</div>
+                        <div class="div-table-cell alinearderecha">Precio</div>
+                        <div class="div-table-cell alinearderecha">SubTotal</div>
+                    </div>
+                    {% for item in detalle %}
+                        <div class="div-table-row">
+                            <div class="div-table-cell alinearizquierda">
+                                <img src="../media/{{item.producto.imagen}}" alt="{{item.producto.imagen}}" class="imagen_producto">
+                            </div>
+                            <div class="div-table-cell alinearizquierda">{{ item.descripcion }}</div>
+                            <div class="div-table-cell alinearizquierda">{{ item.coproducto }}</div>
+                            <div class="div-table-cell alinearderecha">{{ item.cantidad }}</div>
+                            <div class="div-table-cell alinearderecha">{{ item.precio }}</div>
+                            <div class="div-table-cell alinearderecha">{{ item.precio }}</div>
+                        </div>
+                    {% endfor %}
+
+                    <div class="div-table-row div-table-head row-total">
+                        <div class="div-table-cell alinearizquierda"></div>
+                        <div class="div-table-cell alinearizquierda"></div>
+                        <div class="div-table-cell alinearizquierda"></div>
+                        <div class="div-table-cell alinearderecha"></div>
+                        <div class="div-table-cell alinearderecha">TOTAL: </div>
+                        <div class="div-table-cell alinearderecha">S/. {{pedido.total}}</div>
+                    </div>
+                </div>
+                
+                <div class="row-button">
+                    <a href="{% url 'sispedidotodos' %}" class="btn btn-primary btn-sm">Retornar</a>
+                </div>
+            </div>
+        </div>
+{% endblock body %}
+

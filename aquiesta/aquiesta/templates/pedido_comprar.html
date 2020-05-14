@@ -63,6 +63,23 @@
         label{
             margin-bottom: 0;
         }
+        .ok{
+            height: 60px;
+            margin: auto;
+            margin-top: 50px;
+        }
+        .btn-volver{
+            margin-top: 20px;
+        }
+        .btn-carrito{
+            margin-top: 5px;
+        }
+        .container_pedido_comprado{
+            margin: auto;
+            width: 300px;
+            text-align: center;
+            font-size: 14px;
+        }
     </style>
 {% endblock extracss %}
 
@@ -71,126 +88,145 @@
     <div class="fondoBody">
         <div class="container" style="padding-top: 70px;">
             <div class="container" style="padding-top: 20px;">
-                <div class="form-row">
-                    <div class="col-6 pedido_contenedor">
-                        <div class="form-row order_header">
-                            <div class="col-6">
-                                Total a pagar: 
-                            </div>
-                            <div class="col-6 pedido_total">
-                                S/ 13.60
-                            </div>
+                {% if pedido.st_pedido in 'COMPRADO' %}
+                    <div class="container_pedido_comprado">
+                        <div class="row">
+                            <img src="../media/static/ok.png" alt="" class="ok">
                         </div>
-                        <div class="form-row order_body">
-                            <div class="col-11 order_body_container">
-                                <div class="row">
-                                    <div class="col-1">
-                                        <img src="../media/static/candado.jpg" alt="" class="candado">
+                        <div class="row">
+                            <p class="h5 m-auto mb-10">¡Compra realizada!</p>
+                        </div>
+                        <div class="row">
+                            <p>Tu compra ha sido realizada con èxito, te estamos enviando un correo electrónico confirmándote la compra y el pago de tu pedido.</p>
+                        </div>
+                        {% if Qitems == 0 %}
+                        {% else %}
+                            <div class="row">
+                                <a href="{% url 'pedidoproceso' %}" class="btn btn-sm btn-success btn-carrito w-100">Ir a carrito de compras</a>
+                            </div>
+                        {% endif %}
+                        <div class="row">
+                            <a href="{% url 'inicio' %}" class="btn btn-sm btn-success w-100 btn-volver">Volver a tienda</a>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if pedido.st_pedido in 'PROCESO' %}
+                    <form action="{% url 'pedidopagar' pedido.id_pedido %}" method="POST">
+                        {% csrf_token %}
+                        <div class="form-row">
+                            <div class="col-6 pedido_contenedor">
+                                <div class="form-row order_header">
+                                    <div class="col-6">
+                                        Total a pagar: 
                                     </div>
-                                    <div class="col-8">
-                                        <p>Operación 100% segura</p>
-                                    </div>
-                                    <div class="col-3 contenedor_norton">
-                                        <img src="../media/static/Norton.jpg" alt="" class="norton">
+                                    <div class="col-6 pedido_total">
+                                        {{ pedido.subtotal }}
                                     </div>
                                 </div>
-                                <div class="row tarjeta_data">
-                                    <div class="row col-12 pr-0">
-                                        <div class="col-6 pr-1">
-                                            <label for="">Número de tarjeta</label>
-                                            <input type="text" class="form-control" placeholder="xxxx xxxx xxxx xxxx">
+                                <div class="form-row order_body">
+                                    <div class="col-11 order_body_container">
+                                        <div class="row">
+                                            <div class="col-1">
+                                                <img src="../media/static/candado.jpg" alt="" class="candado">
+                                            </div>
+                                            <div class="col-8">
+                                                <p>Operación 100% segura</p>
+                                            </div>
+                                            <div class="col-3 contenedor_norton">
+                                                <img src="../media/static/Norton.jpg" alt="" class="norton">
+                                            </div>
                                         </div>
-                                        <div class="col-6">
-                                            <div class="row">
-                                                <label for="">Fecha de expiración</label>
-                                                <div class="col-7 pr-0 pl-0">
-                                                    <select name="mes" id="mes" class="form-control">
-                                                        <option value="01">Enero</option>
-                                                        <option value="02">Febrero</option>
-                                                        <option value="03">Marzo</option>
-                                                        <option value="04">Abril</option>
-                                                        <option value="05">Mayo</option>
-                                                        <option value="06">Junio</option>
-                                                        <option value="07">Julio</option>
-                                                        <option value="08">Agosto</option>
-                                                        <option value="09">Septiembre</option>
-                                                        <option value="10">Octubre</option>
-                                                        <option value="11">Noviembre</option>
-                                                        <option value="12">Diciembre</option>
-                                                    </select>
+                                        <div class="row tarjeta_data">
+                                            <div class="row col-12 pr-0">
+                                                <div class="col-6 pr-1">
+                                                    <label for="">Número de tarjeta</label>
+                                                    <input type="text" class="form-control" placeholder="xxxx xxxx xxxx xxxx" required>
                                                 </div>
-                                                <div class="col-5 pl-1 pr-0">
-                                                    <select name="mes" id="mes" class="form-control">
-                                                        <option value="2020">2020</option>
-                                                        <option value="2021">2021</option>
-                                                        <option value="2022">2022</option>
-                                                        <option value="2023">2023</option>
-                                                        <option value="2024">2024</option>
-                                                        <option value="2025">2025</option>
-                                                    </select>
+                                                <div class="col-6">
+                                                    <div class="row">
+                                                        <label for="">Fecha de expiración</label>
+                                                        <div class="col-7 pr-0 pl-0">
+                                                            <select name="mes" id="mes" class="form-control" required>
+                                                                <option value="">---</option>
+                                                                <option value="01">Enero</option>
+                                                                <option value="02">Febrero</option>
+                                                                <option value="03">Marzo</option>
+                                                                <option value="04">Abril</option>
+                                                                <option value="05">Mayo</option>
+                                                                <option value="06">Junio</option>
+                                                                <option value="07">Julio</option>
+                                                                <option value="08">Agosto</option>
+                                                                <option value="09">Septiembre</option>
+                                                                <option value="10">Octubre</option>
+                                                                <option value="11">Noviembre</option>
+                                                                <option value="12">Diciembre</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-5 pl-1 pr-0">
+                                                            <select name="mes" id="mes" class="form-control" required>
+                                                                <option value="">---</option>
+                                                                <option value="2020">2020</option>
+                                                                <option value="2021">2021</option>
+                                                                <option value="2022">2022</option>
+                                                                <option value="2023">2023</option>
+                                                                <option value="2024">2024</option>
+                                                                <option value="2025">2025</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row col-12 pr-0">
+                                                <div class="col-6 pr-1">
+                                                    <label for="nombre">Titular de la tarjeta</label>
+                                                    {{form_usuario.nombre}}
+                                                    <span class="comentario">Tal como está impreso en la tarjeta</span>
+                                                </div>
+                                                <div class="col-6 pr-0 pl-0">
+                                                    <label for="">Código de seguridad</label>
+                                                    <input type="text" class="form-control" placeholder="000" required>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row emisor_data">
+                                            <div class="row col-12 pr-0">
+                                                <div class="col-6 pr-1">
+                                                    <label for="tipo_doc_ident">Tipo de documento</label>
+                                                    {{form_usuario.tipo_doc_ident}}
+                                                </div>
+                                                <div class="col-6 pr-0 pl-0">
+                                                    <label for="">Numero de documento</label>
+                                                    {{form_usuario.num_doc_ident}}
+                                                </div>
+                                            </div>
+
+                                            <div class="row col-12 pr-0">
+                                                <div class="col-6 pr-1">
+                                                    <label for="telefono">Telefono de contacto</label>
+                                                    {{form_usuario.telefono}}
+                                                    <span class="comentario">Para contactarte si hay algun problema</span>
+                                                </div>
+                                                <div class="col-6 pr-0 pl-0">
+                                                    <label for="">Email</label>
+                                                    <input type="email" class="form-control" placeholder="Email" value="{{request.user.email}}">
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="row col-12 pr-0">
+                                                <div class="col-6"></div>
+                                                <div class="col-6 pr-0">
+                                                    <button type="submit" class="btn btn-sm btn-danger w-100">Pagar</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row col-12 pr-0">
-                                        <div class="col-6 pr-1">
-                                            <label for="">Titular de la tarjeta</label>
-                                            <input type="text" class="form-control" placeholder="Ej. Antonio Rojas">
-                                            <span class="comentario">Tal como está impreso en la tarjeta</span>
-                                        </div>
-                                        <div class="col-6 pr-0 pl-0">
-                                            <label for="">Código de seguridad</label>
-                                            <input type="text" class="form-control" placeholder="000">
-                                        </div>
-                                    </div>
-
-                                    
-                                </div>
-
-                                <div class="row emisor_data">
-                                    <div class="row col-12 pr-0">
-                                        <div class="col-6 pr-1">
-                                            <label for="">Tipo de documento</label>
-                                            <select name="tipo_documento" id="tipo_documento" class="form-control">
-                                                <option value="01">DNI</option>
-                                                <option value="04">Carnet de extranjeria</option>
-                                                <option value="06">RUC</option>
-                                                <option value="07">Pasaporte</option>
-                                                <option value="11">Part. Nacimiento</option>
-                                                <option value="00">Otros</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-6 pr-0 pl-0">
-                                            <label for="">Numero de documento</label>
-                                            <input type="text" class="form-control" placeholder="xxxxxxxx">
-                                        </div>
-                                    </div>
-
-                                    <div class="row col-12 pr-0">
-                                        <div class="col-6 pr-1">
-                                            <label for="">Telefono de contacto</label>
-                                            <input type="text" class="form-control" placeholder="Ej. Antonio Rojas">
-                                            <span class="comentario">Para contactarte si hay algun problema</span>
-                                        </div>
-                                        <div class="col-6 pr-0 pl-0">
-                                            <label for="">Email</label>
-                                            <input type="email" class="form-control" placeholder="Email">
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="row col-12 pr-0">
-                                        <div class="col-6"></div>
-                                        <div class="col-6 pr-0">
-                                            <a href="#" class="btn btn-sm btn-danger w-100">Pagar</a>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
+
                         </div>
-                    </div>
-
-                </div>
-
+                    </form>
+                {% endif %}
             </div>
         </div>
     </div>

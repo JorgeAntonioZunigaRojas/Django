@@ -3,6 +3,14 @@
     AQuiEsta - Inicio
 {% endblock titulo %}
 
+{% block extracss %}
+    <style>
+        a:link, a:visited, a:active {
+            text-decoration:none;
+        }
+    </style>
+{% endblock extracss %}
+
 {% block body %}
     <div class="container">
         <div class="page-header">
@@ -11,29 +19,37 @@
     </div>
     <section class="full-reset text-center" style="padding: 40px 0;">
         <article class="tile">
-            <div class="tile-icon full-reset"><i class="zmdi zmdi-truck"></i></div>
-            <div class="tile-name all-tittles">Pedidos por Despachar</div>
-            <div class="tile-num full-reset">{{QPxDespachar}}</div>
+            <a href="{% url 'sispedidopendienteentregalista' %}">
+                <div class="tile-icon full-reset"><i class="zmdi zmdi-truck"></i></div>
+                <div class="tile-name all-tittles">Pedidos pendientes de entrega</div>
+                <div class="tile-num full-reset">{{QPxDespachar}}</div>
+            </a>
         </article>
-        <article class="tile">
+<!--         <article class="tile">
             <div class="tile-icon full-reset"><i class="zmdi zmdi-balance"></i></div>
             <div class="tile-name all-tittles">Pedidos Entregados</div>
             <div class="tile-num full-reset">{{QPEntregados}}</div>
+        </article> -->
+        <article class="tile">
+            <a href="{% url 'sispedidotodos' %}">
+                <div class="tile-icon full-reset"><i class="zmdi zmdi-calendar"></i></div>
+                <div class="tile-name all-tittles">Todos los pedidos</div>
+                <div class="tile-num full-reset">{{QPEmitidos}}</div>
+            </a>
         </article>
         <article class="tile">
-            <div class="tile-icon full-reset"><i class="zmdi zmdi-calendar"></i></div>
-            <div class="tile-name all-tittles">Todos los pedidos</div>
-            <div class="tile-num full-reset">{{QPEmitidos}}</div>
-        </article>
-        <article class="tile">
-            <div class="tile-icon full-reset"><i class="zmdi zmdi-bookmark-outline"></i></div>
-            <div class="tile-name all-tittles">Categorias</div>
-            <div class="tile-num full-reset">{{QCategorias}}</div>
+            <a href="{% url 'siscategoria' %}">
+                <div class="tile-icon full-reset"><i class="zmdi zmdi-bookmark-outline"></i></div>
+                <div class="tile-name all-tittles">Categorias</div>
+                <div class="tile-num full-reset">{{QCategorias}}</div>
+            </a>
         </article>            
         <article class="tile">
-            <div class="tile-icon full-reset"><i class="zmdi zmdi-book"></i></div>
-            <div class="tile-name all-tittles">Productos</div>
-            <div class="tile-num full-reset">{{QProductos}}</div>
+            <a href="{% url 'sisproductolista' %}">
+                <div class="tile-icon full-reset"><i class="zmdi zmdi-book"></i></div>
+                <div class="tile-name all-tittles">Productos</div>
+                <div class="tile-num full-reset">{{QProductos}}</div>
+            </a>
         </article>
     </section>
 {% endblock body %}

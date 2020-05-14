@@ -65,9 +65,9 @@
                     <li>
                         <div class="dropdown-menu-button"><i class="zmdi zmdi-case zmdi-hc-fw"></i>&nbsp;&nbsp; Pedidos <i class="zmdi zmdi-chevron-down pull-right zmdi-hc-fw"></i></div>
                         <ul class="list-unstyled">
-                            <li><a href="#"><i class="zmdi zmdi-truck zmdi-hc-fw"></i>&nbsp;&nbsp; Pedidos por despachar <span class="label label-danger pull-right label-mhover">7</span></a></li>
-                            <li><a href="#"><i class="zmdi zmdi-balance zmdi-hc-fw"></i>&nbsp;&nbsp; Pedidos Entregados</a></li>
-                            <li><a href="#"><i class="zmdi zmdi-calendar zmdi-hc-fw"></i>&nbsp;&nbsp; Todos los pedidos</a></li>
+                            <li><a href="{% url 'sispedidopendienteentregalista' %}"><i class="zmdi zmdi-truck zmdi-hc-fw"></i>&nbsp;&nbsp; Pedidos por despachar <span class="label label-danger pull-right label-mhover">{{QPxDespachar}}</span></a></li>
+                            <!-- <li><a href="#"><i class="zmdi zmdi-balance zmdi-hc-fw"></i>&nbsp;&nbsp; Pedidos Entregados</a></li> -->
+                            <li><a href="{% url 'sispedidotodos' %}"><i class="zmdi zmdi-calendar zmdi-hc-fw"></i>&nbsp;&nbsp; Todos los pedidos</a></li>
                         </ul>
                     </li>
                     <li>

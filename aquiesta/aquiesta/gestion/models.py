@@ -120,13 +120,27 @@ class Productodetalle(models.Model):
         return self.clave
 
 class Pedido(models.Model):
+    dni = '01'
+    carnet = '04'
+    ruc = '06'
+    pasaporte = '07'
+    partida = '11'
+    otros = '00'
+    tipo_documento_identidad = [
+        (dni,'DNI'),
+        (carnet,'CARNET DE EXTRANJERIA'),
+        (ruc,'RUC'),
+        (pasaporte,'PASAPORTE'),
+        (partida,'PART. DE NACIMIENTO-IDENTIDAD'),
+        (otros,'OTROS'),
+    ]
     id_pedido = models.AutoField(primary_key=True)
     empresa = models.ForeignKey('Empresa', models.DO_NOTHING, db_column='id_empresa', blank=True, null=True)
     serie = models.CharField(max_length=4, blank=True, null=True)
     numero = models.CharField(max_length=8, blank=True, null=True)
     fec_emision = models.DateTimeField(blank=True, null=True)
     id_usuario = models.IntegerField(null=True)
-    tipo_doc_iden = models.CharField(max_length=1, blank=True, null=True)
+    tipo_doc_iden = models.CharField(max_length=2, choices=tipo_documento_identidad, default=otros)
     num_doc_iden = models.CharField(max_length=15, blank=True, null=True)
     nombre = models.CharField(max_length=200, blank=True, null=True)
     direccion = models.CharField(max_length=200, blank=True, null=True)
@@ -135,6 +149,7 @@ class Pedido(models.Model):
     subtotal = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
     entrega_domicilio = models.BooleanField(default=False)
     costo_entrega = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    total = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
     st_pedido = models.CharField(max_length=200, blank=True, null=True)
     cancelado = models.BooleanField(default=False)
     fecha_creacion=models.DateTimeField('Fecha de creación', auto_now=False, auto_now_add=True)
@@ -154,6 +169,7 @@ class Pedidodetalle(models.Model):
     descripcion = models.CharField(max_length=200, blank=True, null=True)
     cantidad = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
     precio = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    importe = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
     fecha_creacion=models.DateTimeField('Fecha de creación', auto_now=False, auto_now_add=True)
     fecha_edicion=models.DateTimeField('Fecha de edición', auto_now=True, auto_now_add=False)
     

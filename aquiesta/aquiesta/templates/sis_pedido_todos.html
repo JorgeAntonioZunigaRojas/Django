@@ -1,6 +1,6 @@
 {% extends 'basesis.html' %}
 {% block titulo %}
-    AQuiEsta - Categorias
+    AQuiEsta - Pedidos pendiente de entrega
 {% endblock titulo %}
 
 {% block extracss %}
@@ -40,32 +40,64 @@
 {% block body %}
         <div class="container-fluid">
             <div class="">
-                <h2 class="text-left all-tittles titulo-mtto">listado de categorias</h2>
-                <button class="btn btn-primary btn-sm btn-nuevo" onclick="abrir_modal_crear('{% url 'siscategoriacrear' %}')">Nueva categoria</button>
+                <h2 class="text-left all-tittles titulo-mtto">Todos los Pedidos</h2>
             </div>
 
             <form method="GET">
                 <div class="form-group row form-group-buscar">
                   <div class="col-sm-12 col-lg-11">
-                    <input type="text" class="form-control form-control-sm input-buscar" id="buscar" name="buscar" placeholder="Buscar categorias en la lista" value="{{ request.GET.buscar }}">
+                    <input type="text" class="form-control form-control-sm input-buscar" id="buscar" name="buscar" placeholder="Buscar pedidos en la lista" value="{{ request.GET.buscar }}">
                   </div>
-                  &nbsp<button type="submit" class="btn btn-warning btn-sm btn-buscar-producto">Buscar categoria</button>
+                  &nbsp<button type="submit" class="btn btn-warning btn-sm btn-buscar-producto">Buscar pedido</button>
                 </div>
               </form>
 
             <div class="div-table">
                 <div class="div-table-row div-table-head">
-                    <div class="div-table-cell">#</div>
+                    <div class="div-table-cell">Pedido N°</div>
                     <div class="div-table-cell alinearizquierda">Nombre</div>
+                    <div class="div-table-cell alinearizquierda">Doc Identidad</div>
+                    <div class="div-table-cell alinearizquierda">Telefono</div>
+                    <div class="div-table-cell alinearizquierda">Fecha Emisión</div>
+                    <div class="div-table-cell alinearderecha">Total</div>
+                    <div class="div-table-cell alinearderecha">Estado</div>
                     <div class="div-table-cell alinearderecha">Operación&nbsp;&nbsp;</div>
                 </div>
-                {% for categoria in categorias %}
+                {% for pedido in pedidos %}
                     <div class="div-table-row">
-                        <div class="div-table-cell">{{ categoria.id_categoria }}</div>
-                        <div class="div-table-cell alinearizquierda">{{categoria.nombre}}</div>
-                        <div class="div-table-cell alinearderecha">
-                            <button class="btn btn-success btn-sm btn-editar" onclick="abrir_modal_editar('{% url 'siscategoriaeditar' categoria.id_categoria %}')">Editar</button>
-                            <a href="{% url 'siscategoriaeliminar' categoria.id_categoria %}" class="btn btn-danger btn-sm btn-eliminar"> Eliminar</a>&nbsp;&nbsp;
+                        <div class="div-table-cell">{{ pedido.id_pedido }}</div>
+                        <div class="div-table-cell alinearizquierda">{{ pedido.nombre }}</div>
+                        <div class="div-table-cell alinearizquierda">
+                            {% if pedido.tipo_doc_iden in '01' %}
+                                DNI
+                            {% else %}
+                                {% if pedido.tipo_doc_iden in '04' %}
+                                    CARNET EXT
+                                {% else %}
+                                    {% if pedido.tipo_doc_iden in '06' %}
+                                        RUC
+                                    {% else %}
+                                        {% if pedido.tipo_doc_iden in '07' %}
+                                            PASAPORTE
+                                        {% else %}
+                                            {% if pedido.tipo_doc_iden in '11' %}
+                                                P. NAC.
+                                            {% else %}
+                                                OTROS
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+
+
+                            -{{ pedido.num_doc_iden }}</div>
+                        <div class="div-table-cell alinearizquierda">{{ pedido.telefono }}</div>
+                        <div class="div-table-cell alinearizquierda">{{ pedido.fec_emision }}</div>
+                        <div class="div-table-cell alinearderecha">S/ {{ pedido.total }}</div>
+                        <div class="div-table-cell alinearderecha">{{ pedido.st_pedido }}</div>
+                        <div class="div-table-cell alinearderecha">    
+                            <a href="{% url 'sispedidomtto' pedido.id_pedido %}" class="btn btn-success btn-sm btn-editar">Ver Pedido</a>
                         </div>
                     </div>
                 {% endfor %}
